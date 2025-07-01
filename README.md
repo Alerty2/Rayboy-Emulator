@@ -3,11 +3,11 @@ A game boy emulator being developed in the C programming language and Raylib. On
 
 
 # Achievements
-- [x] Input handling  <img src="https://github.com/user-attachments/assets/a74b823a-ac35-420a-8e60-0535e3d82289" width="300"/>
+- [x] Input handling
 - [x] Flags handling
 - [ ] ROM loading
 - [ ] CPU (18/512 instructions)
 - [ ] Graphics
 - [ ] Audio
-- [ ] Cheats, settings and configurations
+- [ ] Cheats, settings and configurations  <img src="https://github.com/user-attachments/assets/a74b823a-ac35-420a-8e60-0535e3d82289" width="300"/>
 - [ ] Other consoles
