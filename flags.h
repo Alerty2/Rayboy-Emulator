@@ -1,10 +1,4 @@
-#include <raylib.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <string.h>
-#include <stdint.h>
-#include <time.h>
+#include "loader.h"
 
 // Activates the selected flag
 void set_flag(uint8_t* flags, int flag){
