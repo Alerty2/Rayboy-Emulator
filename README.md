@@ -27,7 +27,12 @@ I would like to thank this sources that were and are a big help during the devel
 
 ## Build Instructions
 
-You need to have [Raylib](https://www.raylib.com/) installed. Then, compile using:
+You need to have [Raylib](https://www.raylib.com/) installed. 
+```bash
+sudo apt update
+sudo apt install libraylib-dev
+```
+Then, compile using:
 
 ```bash
 bash build.bash
