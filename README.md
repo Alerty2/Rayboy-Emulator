@@ -30,4 +30,4 @@ I would like to thank this sources that were and are a big help during the devel
 You need to have [Raylib](https://www.raylib.com/) installed. Then, compile using:
 
 ```bash
-gcc -o rayboy main.c -lraylib -lm
+bash build.bash
