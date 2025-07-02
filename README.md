@@ -6,7 +6,7 @@ A game boy emulator being developed in the C programming language and Raylib. On
 # Achievements
 - [x] Input handling
 - [x] Flags handling
-- [ ] ROM loading
+- [x] ROM loading
 - [ ] CPU (18/512 instructions)
 - [ ] Graphics
 - [ ] Audio
