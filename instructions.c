@@ -177,6 +177,12 @@ void rra(uint8_t memory[], CPU* cpu){ // RRA. Rotate A right through carry
 
     cpu->cycles += 4;
 }
+void cpl(uint8_t memory[], CPU* cpu){ // CPL. Biwise not
+    cpu->af.A = ~cpu->af.A; // Bitwise NOT over A register
+    set_flag(&cpu->af.F, FLAG_N);
+    set_flag(&cpu->af.F, FLAG_H);
+    cpu->cycles += 4;
+}
 void jump_register_e8(uint8_t memory[], CPU* cpu){
     cpu->pc = cpu->pc += (int8_t)memory[cpu->pc++];
     cpu->cycles += 12;
@@ -189,4 +195,17 @@ void jump_register_nz_e8(uint8_t memory[], CPU* cpu){
     }else{
         cpu->cycles += 8;
     }
+}
+void jump_register_z_e8(uint8_t memory[], CPU* cpu){
+    int8_t add_adress = (int8_t)memory[cpu->pc++];
+    if (cpu->af.F & FLAG_Z){
+        cpu->pc += add_adress;
+        cpu->cycles += 12;
+    }else{
+        cpu->cycles += 8;
+    }
+}
+// Miscelanous
+void dda(uint8_t memory[], CPU* cpu){
+    // TODO: Complicated instruction
 }
