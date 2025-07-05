@@ -66,7 +66,12 @@ void rlca(uint8_t memory[], CPU* cpu);
 void rla(uint8_t memory[], CPU* cpu);
 void rrca(uint8_t memory[], CPU* cpu);
 void rra(uint8_t memory[], CPU* cpu);
+void cpl(uint8_t memory[], CPU* cpu);
 
 // Jumps and conditionals
 void jump_register_e8(uint8_t memory[], CPU* cpu);
 void jump_register_nz_e8(uint8_t memory[], CPU* cpu);
+void jump_register_z_e8(uint8_t memory[], CPU* cpu);
+
+// Miscelaneous
+void dda(uint8_t memory[], CPU* cpu);

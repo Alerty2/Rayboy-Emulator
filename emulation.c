@@ -154,6 +154,50 @@ void emulate_cycle(uint8_t* memory, CPU* cpu) {
             inc_r8(&cpu->af.A, memory, cpu);
             break;
         }
+        case 0x25:{// DEC H . Decrement the value in register H by 1.
+            dec_r8(&cpu->hl.H, memory, cpu);
+            break;
+        }
+        case 0x26:{// LD H, n8. Copy the value n8 into H
+            load_r8_n8(&cpu->hl.H, memory, cpu);
+            break;
+        }
+        case 0x27:{// DAA.
+            dda(memory, cpu); // TODO
+            break;
+        }
+        case 0x28:{// JR Z, e8. Jump relative +e8 if Z = 1
+            jump_register_z_e8(memory, cpu);
+            break;
+        }
+        case 0x29:{// ADD HL, HL. Sum HL to HL.
+            add_r16_r16(&cpu->hl.HL, &cpu->hl.HL, memory, cpu);
+            break;
+        }
+        case 0x2A:{// LD A, [HL+]. Copy from adress HL to A and sum 1
+            load_r8_p16(&cpu->af.A, &cpu->hl.HL, memory, cpu);
+            break;
+        }
+        case 0x2B:{// DEC HL. Decrements register HL by 1
+            dec_r16(&cpu->hl.HL, memory, cpu);
+            break;
+        }
+        case 0x2C:{// INC A. Increments register A by 1
+            inc_r8(&cpu->af.A, memory, cpu);
+            break;
+        }
+        case 0x2D:{// DEC A. Decrements register A by 1
+            dec_r8(&cpu->af.A, memory, cpu);
+            break;
+        }
+        case 0x2E:{// LD A, n8. Copies n8 number into A.
+            load_r8_n8(&cpu->af.A, memory, cpu);
+            break;
+        }
+        case 0x2F:{// CPL. Bitwise not. 1001011 -> 0110100
+            load_r8_n8(&cpu->af.A, memory, cpu);
+            break;
+        }
 
         default:
             printf("Opcode 0x%02X not implemented\n", opcode);
