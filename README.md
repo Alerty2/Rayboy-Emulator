@@ -11,7 +11,7 @@
 | Input handling              | ✅       |
 | Flags handling              | ✅       |
 | ROM loading                 | ✅       |
-| CPU (18/512 instructions)   | 🚧       |
+| CPU (40/512 instructions)   | 🚧       |
 | Graphics                    | ❌       |
 | Audio                       | ❌       |
 | Cheats & Settings           | ❌       |
@@ -27,7 +27,12 @@ I would like to thank this sources that were and are a big help during the devel
 
 ## Build Instructions
 
-You need to have [Raylib](https://www.raylib.com/) installed. Then, compile using:
+You need to have [Raylib](https://www.raylib.com/) installed. 
+```bash
+sudo apt update
+sudo apt install libraylib-dev
+```
+Then, compile using:
 
 ```bash
-gcc -o rayboy main.c -lraylib -lm
+bash build.bash
