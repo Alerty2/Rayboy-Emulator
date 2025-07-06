@@ -7,8 +7,12 @@ void load_r16_n16(uint16_t* reg, uint8_t memory[], CPU* cpu){ // Copies a 16-bit
     *reg = (high << 8) | low;
     cpu->cycles += 12;
 }
-void load_p16_n8(uint16_t* reg, uint8_t* reg2, uint8_t memory[], CPU* cpu){ // LD [HL],r8. Copy the value in register r8 into the byte pointed to by HL.
-    memory[*reg] = *reg2;
+void load_p16_n8(uint16_t* reg, uint8_t memory[], CPU* cpu){ // LD [HL],r8. Copy the value in register r8 into the byte pointed to by HL.
+    memory[*reg] += memory[cpu->pc++];
+    cpu->cycles += 12;
+}
+void load_p16_r8(uint16_t* reg, uint8_t* reg2, uint8_t memory[], CPU* cpu){
+    memory[*reg] += *reg2;
     cpu->cycles += 8;
 }
 void load_r8_n8(uint8_t* reg, uint8_t memory[], CPU* cpu){ // LD r8,n8. Copy the value n8 into register r8.
@@ -28,10 +32,25 @@ void load_r8_p16(uint8_t* reg, uint16_t* reg2, uint8_t memory[], CPU* cpu){ // L
     *reg = memory[*reg2];
     cpu->cycles += 8;
 }
-void load_p16_n8_plus(uint16_t* reg, uint8_t* reg2, uint8_t memory[], CPU* cpu){ // LD [HL],r8. Copy the value in register r8 into the byte pointed to by HL.
-    memory[cpu->hl.HL] = cpu->af.A;
-    cpu->hl.HL++;
-    cpu->cycles += 12;
+void load_p16_r8_plus(uint16_t* reg, uint8_t* reg2, uint8_t memory[], CPU* cpu){ // LD [HL],r8. Copy the value in register r8 into the byte pointed to by HL.
+    memory[*reg] = *reg2;
+    reg++;
+    cpu->cycles += 8;
+}
+void load_p16_r8_minus(uint16_t* reg, uint8_t* reg2, uint8_t memory[], CPU* cpu){
+    memory[*reg] = *reg2;
+    reg--;
+    cpu->cycles += 8;
+}
+void load_r8_p16_plus(uint8_t* reg, uint16_t* reg2, uint8_t memory[], CPU* cpu){ // LD [HL],r8. Copy the value in register r8 into the byte pointed to by HL.
+    *reg = memory[*reg2];
+    reg2++;
+    cpu->cycles += 8;
+}
+void load_r8_p16_minus(uint8_t* reg, uint16_t* reg2, uint8_t memory[], CPU* cpu){
+    *reg = memory[*reg2];
+    reg--;
+    cpu->cycles += 8;
 }
 // Arithmetic instructions (INC, DEC and ADD). Instructions for doing basic arithmetic operations
 void inc_r16(uint16_t* reg, uint8_t memory[], CPU* cpu){ // INC r16. Increments r16 by 1
@@ -59,6 +78,10 @@ void inc_r8(uint8_t* reg, uint8_t memory[], CPU* cpu){ // INC r8. Increments r8 
         unset_flag(&cpu->af.F, FLAG_H);
     cpu->cycles += 4;
 }
+void inc_p16(uint16_t* reg, uint8_t memory[], CPU* cpu){
+    memory[*reg] += 1;
+    cpu->cycles += 12;
+}
 void dec_r8(uint8_t* reg, uint8_t memory[], CPU* cpu){ // DEC r8. Decrements r8 by 1
     uint8_t before = *reg;
     uint8_t result = before - 1;
@@ -84,6 +107,10 @@ void dec_r8(uint8_t* reg, uint8_t memory[], CPU* cpu){ // DEC r8. Decrements r8 
 void dec_r16(uint16_t* reg, uint8_t memory[], CPU* cpu){ // DEC r16. Decrements r16 by 1
     *reg -= 1;
     cpu->cycles += 8;
+}
+void dec_p16(uint16_t* reg, uint8_t memory[], CPU* cpu){
+    memory[*reg] -= 1;
+    cpu->cycles += 12;
 }
 void add_r16_r16(uint16_t* reg, uint16_t* reg2, uint8_t memory[], CPU* cpu){ // ADD r16, r16. Adds r16 to r16
     uint32_t result = *reg + *reg2;
@@ -199,6 +226,24 @@ void jump_register_nz_e8(uint8_t memory[], CPU* cpu){
 void jump_register_z_e8(uint8_t memory[], CPU* cpu){
     int8_t add_adress = (int8_t)memory[cpu->pc++];
     if (cpu->af.F & FLAG_Z){
+        cpu->pc += add_adress;
+        cpu->cycles += 12;
+    }else{
+        cpu->cycles += 8;
+    }
+}
+void jump_register_nc_e8(uint8_t memory[], CPU* cpu){
+    int8_t add_adress = (int8_t)memory[cpu->pc++];
+    if (!(cpu->af.F & FLAG_C)){
+        cpu->pc += add_adress;
+        cpu->cycles += 12;
+    }else{
+        cpu->cycles += 8;
+    }
+}
+void jump_register_c_e8(uint8_t memory[], CPU* cpu){
+    int8_t add_adress = (int8_t)memory[cpu->pc++];
+    if (cpu->af.F & FLAG_C){
         cpu->pc += add_adress;
         cpu->cycles += 12;
     }else{
