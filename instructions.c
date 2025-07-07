@@ -52,6 +52,11 @@ void load_r8_p16_minus(uint8_t* reg, uint16_t* reg2, uint8_t memory[], CPU* cpu)
     reg--;
     cpu->cycles += 8;
 }
+void load_r8_r8(uint8_t* reg, uint8_t* reg2, uint8_t memory[], CPU* cpu){
+    *reg = *reg2;
+    cpu->cycles += 4;
+}
+
 // Arithmetic instructions (INC, DEC and ADD). Instructions for doing basic arithmetic operations
 void inc_r16(uint16_t* reg, uint8_t memory[], CPU* cpu){ // INC r16. Increments r16 by 1
     *reg+= 1;
