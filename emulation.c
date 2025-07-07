@@ -334,6 +334,71 @@ void emulate_cycle(uint8_t* memory, CPU* cpu) {
             load_r8_r8(&cpu->bc.C, &cpu->af.A, memory, cpu);
             break;
         }
+        case 0x50:{// LD D, B . Copy B into D
+            load_r8_r8(&cpu->de.D, &cpu->bc.B, memory, cpu);
+            break;
+        }
+        case 0x51:{// LD D, C . Copy C into D
+            load_r8_r8(&cpu->de.D, &cpu->bc.C, memory, cpu);
+            break;
+        }
+        case 0x52:{// LD D, D . Copy D into D?
+            load_r8_r8(&cpu->de.D, &cpu->de.D, memory, cpu);
+            break;
+        }
+        case 0x53:{// LD D, E . Copy E into D
+            load_r8_r8(&cpu->de.D, &cpu->de.E, memory, cpu);
+            break;
+        }
+        case 0x54:{// LD D, H . Copy H into D
+            load_r8_r8(&cpu->de.D, &cpu->hl.H, memory, cpu);
+            break;
+        }
+        case 0x55:{// LD D, L . Copy L into D
+            load_r8_r8(&cpu->de.D, &cpu->hl.L, memory, cpu);
+            break;
+        }
+        case 0x56:{// LD D, [HL] . Copy value pointed by HL into D
+            load_r8_p16(&cpu->de.D, &cpu->hl.HL, memory, cpu);
+            break;
+        }
+        case 0x57:{// LD D, A . Copy A into D
+            load_r8_r8(&cpu->de.D, &cpu->af.A, memory, cpu);
+            break;
+        }
+        case 0x58:{// LD E, B . Copy B into E
+            load_r8_r8(&cpu->de.E, &cpu->bc.B, memory, cpu);
+            break;
+        }
+        case 0x59:{// LD E, C . Copy C into E
+            load_r8_r8(&cpu->de.E, &cpu->bc.C, memory, cpu);
+            break;
+        }
+        case 0x5A:{// LD E, D . Copy D into E
+            load_r8_r8(&cpu->de.E, &cpu->de.D, memory, cpu);
+            break;
+        }
+        case 0x5B:{// LD E, E. Copy E into E
+            load_r8_r8(&cpu->de.E, &cpu->de.E, memory, cpu);
+            break;
+        }
+        case 0x5C:{// LD E, H. Copy H into E
+            load_r8_r8(&cpu->hl.H, &cpu->de.E, memory, cpu);
+            break;
+        }
+        case 0x5D:{// LD E, L. Copy L into E
+            load_r8_r8(&cpu->hl.L, &cpu->de.E, memory, cpu);
+            break;
+        }
+        case 0x5E:{// LD E, [HL]. Copy value pointed by HL into E
+            load_r8_p16(&cpu->de.E, &cpu->hl.HL, memory, cpu);
+            break;
+        }
+        case 0x5F:{// LD E, A. Copy A into E.
+            load_r8_r8(&cpu->de.E, &cpu->af.A, memory, cpu);
+            break;
+        }
+
 
         default:
             printf("Opcode 0x%02X not implemented\n", opcode);
