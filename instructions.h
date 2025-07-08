@@ -67,6 +67,10 @@ void dec_r8(uint8_t* reg, uint8_t memory[], CPU* cpu);
 void dec_r16(uint16_t* reg, uint8_t memory[], CPU* cpu);
 void dec_p16(uint16_t* reg, uint8_t memory[], CPU* cpu);
 void add_r16_r16(uint16_t* reg, uint16_t* reg2, uint8_t memory[], CPU* cpu);
+void add_r8_r8(uint8_t* reg, uint8_t* reg2, uint8_t memory[], CPU* cpu);
+void add_r8_p16(uint8_t* reg, uint16_t* reg2, uint8_t memory[], CPU* cpu);
+void adc_r8_r8(uint8_t* reg, uint8_t* reg2, uint8_t memory[], CPU* cpu);
+void adc_r8_p16(uint8_t* reg, uint16_t* reg2, uint8_t memory[], CPU* cpu);
 
 // Binary operations
 void rlca(uint8_t memory[], CPU* cpu);
