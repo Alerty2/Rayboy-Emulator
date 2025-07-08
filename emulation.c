@@ -526,7 +526,70 @@ void emulate_cycle(uint8_t* memory, CPU* cpu) {
             load_r8_r8(&cpu->af.A, &cpu->af.A, memory, cpu);
             break;
         }
-
+        case 0x80:{// ADD A, B. Sum values A and B
+            add_r8_r8(&cpu->af.A, &cpu->bc.B, memory, cpu);
+            break;
+        }
+        case 0x81:{// ADD A, C. Sum values A and C
+            add_r8_r8(&cpu->af.A, &cpu->bc.C, memory, cpu);
+            break;
+        }
+        case 0x82:{// ADD A, D. Sum values A and D
+            add_r8_r8(&cpu->af.A, &cpu->de.D, memory, cpu);
+            break;
+        }
+        case 0x83:{// ADD A, E. Sum values A and E
+            add_r8_r8(&cpu->af.A, &cpu->de.E, memory, cpu);
+            break;
+        }
+        case 0x84:{// ADD A, H. Sum values A and H
+            add_r8_r8(&cpu->af.A, &cpu->hl.H, memory, cpu);
+            break;
+        }
+        case 0x85:{// ADD A, L. Sum values A and L
+            add_r8_r8(&cpu->af.A, &cpu->hl.L, memory, cpu);
+            break;
+        }
+        case 0x86:{// ADD A, [HL]. Sum values A and value pointed by HL
+            add_r8_p16(&cpu->af.A, &cpu->hl.HL, memory, cpu);
+            break;
+        }
+        case 0x87:{// ADD A, A. Sum values A and A
+            add_r8_r8(&cpu->af.A, &cpu->af.A, memory, cpu);
+            break;
+        }
+        case 0x88:{// ADC A, B. Sum values A and B and also the carry flag.
+            adc_r8_r8(&cpu->af.A, &cpu->bc.B, memory, cpu);
+            break;
+        }
+        case 0x89:{// ADC A, C. Sum values A and C and also the carry flag.
+            adc_r8_r8(&cpu->af.A, &cpu->bc.C, memory, cpu);
+            break;
+        }
+        case 0x8A:{// ADC A, D. Sum values A and D and also the carry flag.
+            adc_r8_r8(&cpu->af.A, &cpu->de.D, memory, cpu);
+            break;
+        }
+        case 0x8B:{// ADC A, E. Sum values A and E and also the carry flag.
+            adc_r8_r8(&cpu->af.A, &cpu->de.E, memory, cpu);
+            break;
+        }
+        case 0x8C:{// ADC A, H. Sum values A and H and also the carry flag.
+            adc_r8_r8(&cpu->af.A, &cpu->hl.H, memory, cpu);
+            break;
+        }
+        case 0x8D:{// ADC A, L. Sum values A and L and also the carry flag.
+            adc_r8_r8(&cpu->af.A, &cpu->hl.L, memory, cpu);
+            break;
+        }
+        case 0x8E:{// ADC A, [HL]. Sum values A and value pointed by HL and also the carry flag.
+            adc_r8_p16(&cpu->af.A, &cpu->hl.HL, memory, cpu);
+            break;
+        }
+        case 0x8F:{// ADC A, A. Sum values A and A and also the carry flag.
+            adc_r8_r8(&cpu->af.A, &cpu->af.A, memory, cpu);
+            break;
+        }
 
 
         default:

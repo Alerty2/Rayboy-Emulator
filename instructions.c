@@ -139,6 +139,92 @@ void add_r16_r16(uint16_t* reg, uint16_t* reg2, uint8_t memory[], CPU* cpu){ // 
     cpu->cycles += 8;
 }
 
+void add_r8_r8(uint8_t* reg, uint8_t* reg2, uint8_t memory[], CPU* cpu) {
+    uint16_t result = *reg + memory[*reg2];
+
+    // Zero flag
+    if ((uint8_t)result == 0)
+        set_flag(&cpu->af.F, FLAG_Z);
+    else
+        unset_flag(&cpu->af.F, FLAG_Z);
+
+    // Subtract flag = 0 (because it's an addition)
+    unset_flag(&cpu->af.F, FLAG_N);
+
+    // Half-carry: if lower nibble overflows
+    if (((*reg & 0x0F) + (*reg2 & 0x0F)) > 0x0F)
+        set_flag(&cpu->af.F, FLAG_H);
+    else
+        unset_flag(&cpu->af.F, FLAG_H);
+
+    // Carry: if result exceeds 0xFF
+    if (result > 0xFF)
+        set_flag(&cpu->af.F, FLAG_C);
+    else
+        unset_flag(&cpu->af.F, FLAG_C);
+
+    *reg = (uint8_t)result;
+    cpu->cycles += 4;
+}
+
+void adc_r8_r8(uint8_t* reg, uint8_t* reg2, uint8_t memory[], CPU* cpu) {
+    uint8_t carry = (cpu->af.F & FLAG_C) ? 1 : 0;
+    uint16_t result = *reg + *reg2 + carry;
+
+    // Zero flag
+    if ((uint8_t)result == 0)
+        set_flag(&cpu->af.F, FLAG_Z);
+    else
+        unset_flag(&cpu->af.F, FLAG_Z);
+
+    // Subtract flag = 0 (because it's an addition)
+    unset_flag(&cpu->af.F, FLAG_N);
+
+    // Half-carry: bit 3 carry to bit 4
+    if (((*reg & 0x0F) + (*reg2 & 0x0F) + carry) > 0x0F)
+        set_flag(&cpu->af.F, FLAG_H);
+    else
+        unset_flag(&cpu->af.F, FLAG_H);
+
+    // Carry: result > 0xFF
+    if (result > 0xFF)
+        set_flag(&cpu->af.F, FLAG_C);
+    else
+        unset_flag(&cpu->af.F, FLAG_C);
+
+    *reg = (uint8_t)result;
+    cpu->cycles += 4;
+}
+
+void adc_r8_p16(uint8_t* reg, uint16_t* reg2, uint8_t memory[], CPU* cpu) {
+    uint8_t carry = (cpu->af.F & FLAG_C) ? 1 : 0;
+    uint16_t result = *reg + memory[*reg2] + carry;
+
+    // Zero flag
+    if ((uint8_t)result == 0)
+        set_flag(&cpu->af.F, FLAG_Z);
+    else
+        unset_flag(&cpu->af.F, FLAG_Z);
+
+    // Subtract flag = 0 (because it's an addition)
+    unset_flag(&cpu->af.F, FLAG_N);
+
+    // Half-carry: bit 3 carry to bit 4
+    if (((*reg & 0x0F) + (*reg2 & 0x0F) + carry) > 0x0F)
+        set_flag(&cpu->af.F, FLAG_H);
+    else
+        unset_flag(&cpu->af.F, FLAG_H);
+
+    // Carry: result > 0xFF
+    if (result > 0xFF)
+        set_flag(&cpu->af.F, FLAG_C);
+    else
+        unset_flag(&cpu->af.F, FLAG_C);
+
+    *reg = (uint8_t)result;
+    cpu->cycles += 4;
+}
+
 
 // Binary operations
 void rlca(uint8_t memory[], CPU* cpu){ // RLCA. Rotate register A left.
