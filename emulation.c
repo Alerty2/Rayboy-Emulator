@@ -590,6 +590,70 @@ void emulate_cycle(uint8_t* memory, CPU* cpu) {
             adc_r8_r8(&cpu->af.A, &cpu->af.A, memory, cpu);
             break;
         }
+        case 0x90:{// SUB A, B. Rest values A and B.
+            sub_r8_r8(&cpu->af.A, &cpu->af.A, memory, cpu);
+            break;
+        }
+        case 0x91:{// SUB A, C. Rest values A and C.
+            sub_r8_r8(&cpu->af.A, &cpu->bc.C, memory, cpu);
+            break;
+        }
+        case 0x92:{// SUB A, D. Rest values A and D.
+            sub_r8_r8(&cpu->af.A, &cpu->de.D, memory, cpu);
+            break;
+        }
+        case 0x93:{// SUB A, E. Rest values A and E.
+            sub_r8_r8(&cpu->af.A, &cpu->de.E, memory, cpu);
+            break;
+        }
+        case 0x94:{// SUB A, H. Rest values A and H.
+            sub_r8_r8(&cpu->af.A, &cpu->hl.H, memory, cpu);
+            break;
+        }
+        case 0x95:{// SUB A, L. Rest values A and L.
+            sub_r8_r8(&cpu->af.A, &cpu->hl.L, memory, cpu);
+            break;
+        }
+        case 0x96:{// SUB A, [HL]. Rest values A and value pointed by HL.
+            sub_r8_p16(&cpu->af.A, &cpu->hl.HL, memory, cpu);
+            break;
+        }
+        case 0x97:{// SUB A, A. Rest values A and A
+            sub_r8_r8(&cpu->af.A, &cpu->af.A, memory, cpu);
+            break;
+        }
+        case 0x98:{// SBC A, B. Rest values A and B and Carry
+            sbc_r8_r8(&cpu->af.A, &cpu->bc.B, memory, cpu);
+            break;
+        }
+        case 0x99:{// SBC A, C. Rest values A and C and Carry
+            sbc_r8_r8(&cpu->af.A, &cpu->bc.C, memory, cpu);
+            break;
+        }
+        case 0x9A:{// SBC A, D. Rest values A and D and Carry
+            sbc_r8_r8(&cpu->af.A, &cpu->de.D, memory, cpu);
+            break;
+        }
+        case 0x9B:{// SBC A, E. Rest values A and E and Carry
+            sbc_r8_r8(&cpu->af.A, &cpu->de.E, memory, cpu);
+            break;
+        }
+        case 0x9C:{// SBC A, H. Rest values A and H and Carry
+            sbc_r8_r8(&cpu->af.A, &cpu->hl.H, memory, cpu);
+            break;
+        }
+        case 0x9D:{// SBC A, L. Rest values A and L and Carry
+            sbc_r8_r8(&cpu->af.A, &cpu->hl.L, memory, cpu);
+            break;
+        }
+        case 0x9E:{// SBC A, [HL]. Rest values A and value pointed by HL and Carry
+            sbc_r8_p16(&cpu->af.A, &cpu->hl.HL, memory, cpu);
+            break;
+        }
+        case 0x9F:{// SBC A, A. Rest values A and A and Carry
+            sbc_r8_r8(&cpu->af.A, &cpu->af.A, memory, cpu);
+            break;
+        }
 
 
         default:
