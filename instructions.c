@@ -371,6 +371,54 @@ void sub_r8_p16(uint8_t* reg, uint16_t* addr, uint8_t memory[], CPU* cpu) {
     *reg = result;
     cpu->cycles += 8; // Esto es típico para SUB A, (HL)
 }
+void cp_r8_r8(uint8_t* reg, uint8_t* reg2, uint8_t memory[], CPU* cpu){
+    uint8_t result = *reg - *reg2;
+    uint8_t value = *reg2;
+    uint8_t before = *reg;
+
+    // Flag Z
+    if (result == 0){
+        set_flag(&cpu->af.F, FLAG_Z);
+    }else{
+        unset_flag(&cpu->af.F, FLAG_Z);
+    }
+    set_flag(&cpu->af.F, FLAG_N);
+    // Half-carry: if borrow from bit 4
+    if ((before & 0x0F) < (value & 0x0F))
+        set_flag(&cpu->af.F, FLAG_H);
+    else
+        unset_flag(&cpu->af.F, FLAG_H);
+
+    // Carry: if borrow from bit 8
+    if (before < value)
+        set_flag(&cpu->af.F, FLAG_C);
+    else
+        unset_flag(&cpu->af.F, FLAG_C);
+}
+void cp_r8_p16(uint8_t* reg, uint16_t* reg2, uint8_t memory[], CPU* cpu){
+    uint8_t result = *reg - memory[*reg2];
+    uint8_t value = memory[*reg2];
+    uint8_t before = *reg;
+
+    // Flag Z
+    if (result == 0){
+        set_flag(&cpu->af.F, FLAG_Z);
+    }else{
+        unset_flag(&cpu->af.F, FLAG_Z);
+    }
+    set_flag(&cpu->af.F, FLAG_N);
+    // Half-carry: if borrow from bit 4
+    if ((before & 0x0F) < (value & 0x0F))
+        set_flag(&cpu->af.F, FLAG_H);
+    else
+        unset_flag(&cpu->af.F, FLAG_H);
+
+    // Carry: if borrow from bit 8
+    if (before < value)
+        set_flag(&cpu->af.F, FLAG_C);
+    else
+        unset_flag(&cpu->af.F, FLAG_C);
+}
 
 // Binary operations
 void rlca(uint8_t memory[], CPU* cpu){ // RLCA. Rotate register A left.
@@ -502,6 +550,38 @@ void xor_r8_p16(uint8_t* reg, uint16_t* reg2, uint8_t memory[], CPU* cpu){
     unset_flag(&cpu->af.F, FLAG_C);
 
     // H is always unset in XOR
+    unset_flag(&cpu->af.F, FLAG_H);
+    cpu->cycles += 4;
+}
+void or_r8_r8(uint8_t* reg, uint8_t* reg2, uint8_t memory[], CPU* cpu){
+    uint8_t result = *reg | *reg2;
+    *reg = result;
+    // Z flag: set if result is zero
+    if (result == 0)
+        set_flag(&cpu->af.F, FLAG_Z);
+    else
+        unset_flag(&cpu->af.F, FLAG_Z);
+    // N and C are always reset
+    unset_flag(&cpu->af.F, FLAG_N);
+    unset_flag(&cpu->af.F, FLAG_C);
+
+    // H is always unset in OR
+    unset_flag(&cpu->af.F, FLAG_H);
+    cpu->cycles += 4;
+}
+void or_r8_p16(uint8_t* reg, uint16_t* reg2, uint8_t memory[], CPU* cpu){
+    uint8_t result = *reg | memory[*reg2];
+    *reg = result;
+    // Z flag: set if result is zero
+    if (result == 0)
+        set_flag(&cpu->af.F, FLAG_Z);
+    else
+        unset_flag(&cpu->af.F, FLAG_Z);
+    // N and C are always reset
+    unset_flag(&cpu->af.F, FLAG_N);
+    unset_flag(&cpu->af.F, FLAG_C);
+
+    // H is always unset in OR
     unset_flag(&cpu->af.F, FLAG_H);
     cpu->cycles += 4;
 }

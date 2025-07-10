@@ -718,6 +718,70 @@ void emulate_cycle(uint8_t* memory, CPU* cpu) {
             xor_r8_r8(&cpu->af.A, &cpu->af.A, memory, cpu);
             break;
         }
+        case 0xB0:{// OR A, B. Bitwise OR between A and B
+            or_r8_r8(&cpu->af.A, &cpu->bc.B, memory, cpu);
+            break;
+        }
+        case 0xB1:{// OR A, C. Bitwise OR between A and C
+            or_r8_r8(&cpu->af.A, &cpu->bc.C, memory, cpu);
+            break;
+        }
+        case 0xB2:{// OR A, D. Bitwise OR between A and D
+            or_r8_r8(&cpu->af.A, &cpu->de.D, memory, cpu);
+            break;
+        }
+        case 0xB3:{// OR A, E. Bitwise OR between A and E
+            or_r8_r8(&cpu->af.A, &cpu->de.E, memory, cpu);
+            break;
+        }
+        case 0xB4:{// OR A, H. Bitwise OR between A and H
+            or_r8_r8(&cpu->af.A, &cpu->hl.H, memory, cpu);
+            break;
+        }
+        case 0xB5:{// OR A, L. Bitwise OR between A and L
+            or_r8_r8(&cpu->af.A, &cpu->hl.L, memory, cpu);
+            break;
+        }
+        case 0xB6:{// OR A, [HL]. Bitwise OR between A and value pointed by HL
+            or_r8_p16(&cpu->af.A, &cpu->hl.HL, memory, cpu);
+            break;
+        }
+        case 0xB7:{// OR A, A. Bitwise OR between A and A
+            or_r8_r8(&cpu->af.A, &cpu->af.A, memory, cpu);
+            break;
+        }
+        case 0xB8:{// CP A, B. Compare A and B and put flags accoordingly.
+            cp_r8_r8(&cpu->af.A, &cpu->bc.B, memory, cpu);
+            break;
+        }
+        case 0xB9:{// CP A, C. Compare A and C and put flags accoordingly.
+            cp_r8_r8(&cpu->af.A, &cpu->bc.C, memory, cpu);
+            break;
+        }
+        case 0xBA:{// CP A, D. Compare A and D and put flags accoordingly.
+            cp_r8_r8(&cpu->af.A, &cpu->de.D, memory, cpu);
+            break;
+        }
+        case 0xBB:{// CP A, E. Compare A and E and put flags accoordingly.
+            cp_r8_r8(&cpu->af.A, &cpu->de.E, memory, cpu);
+            break;
+        }
+        case 0xBC:{// CP A, H. Compare A and H and put flags accoordingly.
+            cp_r8_r8(&cpu->af.A, &cpu->hl.H, memory, cpu);
+            break;
+        }
+        case 0xBD:{// CP A, L. Compare A and L and put flags accoordingly.
+            cp_r8_r8(&cpu->af.A, &cpu->hl.L, memory, cpu);
+            break;
+        }
+        case 0xBE:{// CP A, [HL]. Compare A and value pointed by HL and put flags accoordingly.
+            cp_r8_p16(&cpu->af.A, &cpu->hl.HL, memory, cpu);
+            break;
+        }
+        case 0xBF:{// CP A, A. Compare A and A and put flags accoordingly.
+            cp_r8_r8(&cpu->af.A, &cpu->af.A, memory, cpu);
+            break;
+        }
 
 
         default:
