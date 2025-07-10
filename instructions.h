@@ -82,6 +82,10 @@ void rla(uint8_t memory[], CPU* cpu);
 void rrca(uint8_t memory[], CPU* cpu);
 void rra(uint8_t memory[], CPU* cpu);
 void cpl(uint8_t memory[], CPU* cpu);
+void and_r8_r8(uint8_t* reg, uint8_t* reg2, uint8_t memory[], CPU* cpu);
+void and_r8_p16(uint8_t* reg, uint16_t* reg2, uint8_t memory[], CPU* cpu);
+void xor_r8_r8(uint8_t* reg, uint8_t* reg2, uint8_t memory[], CPU* cpu);
+void xor_r8_p16(uint8_t* reg, uint16_t* reg2, uint8_t memory[], CPU* cpu);
 
 // Jumps and conditionals
 void jump_register_e8(uint8_t memory[], CPU* cpu);

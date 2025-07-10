@@ -654,6 +654,70 @@ void emulate_cycle(uint8_t* memory, CPU* cpu) {
             sbc_r8_r8(&cpu->af.A, &cpu->af.A, memory, cpu);
             break;
         }
+        case 0xA0:{// AND A, B. Bitwise AND between A and C.
+            and_r8_r8(&cpu->af.A, &cpu->bc.B, memory, cpu);
+            break;
+        }
+        case 0xA1:{// AND A, C. Bitwise AND between A and C.
+            and_r8_r8(&cpu->af.A, &cpu->bc.B, memory, cpu);
+            break;
+        }
+        case 0xA2:{// AND A, D. Bitwise AND between A and D.
+            and_r8_r8(&cpu->af.A, &cpu->de.D, memory, cpu);
+            break;
+        }
+        case 0xA3:{// AND A, E. Bitwise AND between A and E.
+            and_r8_r8(&cpu->af.A, &cpu->de.E, memory, cpu);
+            break;
+        }
+        case 0xA4:{// AND A, H. Bitwise AND between A and H.
+            and_r8_r8(&cpu->af.A, &cpu->hl.H, memory, cpu);
+            break;
+        }
+        case 0xA5:{// AND A, L. Bitwise AND between A and L.
+            and_r8_r8(&cpu->af.A, &cpu->hl.L, memory, cpu);
+            break;
+        }
+        case 0xA6:{// AND A, [HL]. Bitwise AND between A and value pointed by HL
+            and_r8_p16(&cpu->af.A, &cpu->hl.HL, memory, cpu);
+            break;
+        }
+        case 0xA7:{// AND A, A. Bitwise AND between A and A
+            and_r8_r8(&cpu->af.A, &cpu->af.A, memory, cpu);
+            break;
+        }
+        case 0xA8:{// XOR A, B. Bitwise XOR between A and B
+            xor_r8_r8(&cpu->af.A, &cpu->bc.B, memory, cpu);
+            break;
+        }
+        case 0xA9:{// XOR A, C. Bitwise XOR between A and C
+            xor_r8_r8(&cpu->af.A, &cpu->bc.C, memory, cpu);
+            break;
+        }
+        case 0xAA:{// XOR A, D. Bitwise XOR between A and D
+            xor_r8_r8(&cpu->af.A, &cpu->de.D, memory, cpu);
+            break;
+        }
+        case 0xAB:{// XOR A, E. Bitwise XOR between A and E
+            xor_r8_r8(&cpu->af.A, &cpu->de.E, memory, cpu);
+            break;
+        }
+        case 0xAC:{// XOR A, H. Bitwise XOR between A and H
+            xor_r8_r8(&cpu->af.A, &cpu->hl.H, memory, cpu);
+            break;
+        }
+        case 0xAD:{// XOR A, L. Bitwise XOR between A and L
+            xor_r8_r8(&cpu->af.A, &cpu->hl.L, memory, cpu);
+            break;
+        }
+        case 0xAE:{// XOR A, [HL]. Bitwise XOR between A and value pointed by HL
+            xor_r8_p16(&cpu->af.A, &cpu->hl.HL, memory, cpu);
+            break;
+        }
+        case 0xAF:{// XOR A, A. Bitwise XOR between A and A
+            xor_r8_r8(&cpu->af.A, &cpu->af.A, memory, cpu);
+            break;
+        }
 
 
         default:

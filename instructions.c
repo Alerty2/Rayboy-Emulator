@@ -441,6 +441,71 @@ void rra(uint8_t memory[], CPU* cpu){ // RRA. Rotate A right through carry
 
     cpu->cycles += 4;
 }
+void and_r8_r8(uint8_t* reg, uint8_t* reg2, uint8_t memory[], CPU* cpu){
+    uint8_t result = *reg & *reg2;
+    *reg = result;
+    // Z flag: set if result is zero
+    if (result == 0)
+        set_flag(&cpu->af.F, FLAG_Z);
+    else
+        unset_flag(&cpu->af.F, FLAG_Z);
+    // N and C are always reset
+    unset_flag(&cpu->af.F, FLAG_N);
+    unset_flag(&cpu->af.F, FLAG_C);
+
+    // H is always set in AND
+    set_flag(&cpu->af.F, FLAG_H);
+    cpu->cycles += 4;
+}
+void and_r8_p16(uint8_t* reg, uint16_t* reg2, uint8_t memory[], CPU* cpu){
+    uint8_t result = *reg & memory[*reg2];
+    *reg = result;
+    // Z flag: set if result is zero
+    if (result == 0)
+        set_flag(&cpu->af.F, FLAG_Z);
+    else
+        unset_flag(&cpu->af.F, FLAG_Z);
+    // N and C are always reset
+    unset_flag(&cpu->af.F, FLAG_N);
+    unset_flag(&cpu->af.F, FLAG_C);
+
+    // H is always set in AND
+    set_flag(&cpu->af.F, FLAG_H);
+    cpu->cycles += 4;
+}
+void xor_r8_r8(uint8_t* reg, uint8_t* reg2, uint8_t memory[], CPU* cpu){
+    uint8_t result = *reg ^ *reg2;
+    *reg = result;
+    // Z flag: set if result is zero
+    if (result == 0)
+        set_flag(&cpu->af.F, FLAG_Z);
+    else
+        unset_flag(&cpu->af.F, FLAG_Z);
+    // N and C are always reset
+    unset_flag(&cpu->af.F, FLAG_N);
+    unset_flag(&cpu->af.F, FLAG_C);
+
+    // H is always unset in XOR
+    unset_flag(&cpu->af.F, FLAG_H);
+    cpu->cycles += 4;
+}
+void xor_r8_p16(uint8_t* reg, uint16_t* reg2, uint8_t memory[], CPU* cpu){
+    uint8_t result = *reg ^ memory[*reg2];
+    *reg = result;
+    // Z flag: set if result is zero
+    if (result == 0)
+        set_flag(&cpu->af.F, FLAG_Z);
+    else
+        unset_flag(&cpu->af.F, FLAG_Z);
+    // N and C are always reset
+    unset_flag(&cpu->af.F, FLAG_N);
+    unset_flag(&cpu->af.F, FLAG_C);
+
+    // H is always unset in XOR
+    unset_flag(&cpu->af.F, FLAG_H);
+    cpu->cycles += 4;
+}
+
 void cpl(uint8_t memory[], CPU* cpu){ // CPL. Biwise not
     cpu->af.A = ~cpu->af.A; // Bitwise NOT over A register
     set_flag(&cpu->af.F, FLAG_N);
