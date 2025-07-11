@@ -846,6 +846,67 @@ void emulate_cycle(uint8_t* memory, CPU* cpu) {
             rst_vec(0x08, memory, cpu);
             break;
         }
+        case 0xD0:{// RET NC. Go to adress saved in sp (stack) if FLAG C = 0
+            return_nc(memory, cpu);
+            break;
+        }
+        case 0xD1:{// POP DE. Load the value in sp into DE
+            pop_r16(&cpu->de.DE, memory, cpu);
+            break;
+        }
+        case 0xD2:{// JP NC, a16 . Save current value in stack and jump to a16
+            jump_pointer_a16(memory, cpu);
+            break;
+        }
+        case 0xD3:{// NO INSTRUCTION.
+            break;
+        }
+        case 0xD4:{// CALL NC, a16. Save current pc in stack and go to a16 if FLAG C = 0
+            call_nc_a16(memory, cpu);
+            break;
+        }
+        case 0xD5:{// PUSH DE. Save current pc into stack
+            push_r16(&cpu->de.DE, memory, cpu);
+            break;
+        }
+        case 0xD6:{// SUB A, n8. Substract n8 to A
+            sub_r8_n8(&cpu->af.A, memory, cpu);
+            break;
+        }
+        case 0xD7:{// RST $10. Save current memory to stack and go to 0x10
+            rst_vec(0x10, memory, cpu);
+            break;
+        }
+        case 0xD8:{// RET C. Go to address saved in stack if CARRY = 1
+            return_c(memory, cpu);
+            break;
+        }
+        case 0xD9:{// RETI. TODO
+
+            break;
+        }
+        case 0xDA:{// JP C, a16. Jump to a16 if FLAG C = 1
+            jump_pointer_c_a16(memory, cpu);
+            break;
+        }
+        case 0xDB:{//NO INSTRUCTION.
+            break;
+        }
+        case 0xDC:{// CALL C, a16. Save pc in stack and go to a16 if FLAG C = 1
+            call_c_a16(memory, cpu);
+            break;
+        }
+        case 0xDD:{// NO INSTURCTION.
+            break;
+        }
+        case 0xDE:{// SBC A, n8. Substract A and n8 and carry.
+            sbc_r8_n8(&cpu->af.A, memory, cpu);
+            break;
+        }
+        case 0xDF:{// RST $18. Save current pc to stack and go to 0x18
+            rst_vec(0x18, memory, cpu);
+            break;
+        }
 
         default:
             printf("Opcode 0x%02X not implemented\n", opcode);

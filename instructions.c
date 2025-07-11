@@ -339,7 +339,36 @@ void sbc_r8_r8(uint8_t* reg, uint8_t* reg2, uint8_t memory[], CPU* cpu) {
     *reg = result;
     cpu->cycles += 4;
 }
+void sbc_r8_n8(uint8_t* reg, uint8_t memory[], CPU* cpu) {
+    uint8_t carry = (cpu->af.F & FLAG_C) ? 1 : 0;
+    uint8_t value = memory[cpu->pc++];
+    uint8_t before = *reg;
+    uint8_t result = before - value - carry;
 
+    // Zero flag
+    if (result == 0)
+        set_flag(&cpu->af.F, FLAG_Z);
+    else
+        unset_flag(&cpu->af.F, FLAG_Z);
+
+    // Subtract flag (always set for SBC)
+    set_flag(&cpu->af.F, FLAG_N);
+
+    // Half-carry: if borrow from bit 4
+    if ((before & 0x0F) < ((value & 0x0F) + carry))
+        set_flag(&cpu->af.F, FLAG_H);
+    else
+        unset_flag(&cpu->af.F, FLAG_H);
+
+    // Carry: if borrow from bit 8
+    if (before < (value + carry))
+        set_flag(&cpu->af.F, FLAG_C);
+    else
+        unset_flag(&cpu->af.F, FLAG_C);
+
+    *reg = result;
+    cpu->cycles += 8;
+}
 void sbc_r8_p16(uint8_t* reg, uint16_t* reg2, uint8_t memory[], CPU* cpu) {
     uint8_t carry = (cpu->af.F & FLAG_C) ? 1 : 0;
     uint8_t value = memory[*reg2];
@@ -399,6 +428,36 @@ void sub_r8_r8(uint8_t* reg, uint8_t* reg2, uint8_t memory[], CPU* cpu) {
     *reg = result;
     cpu->cycles += 4;
 }
+void sub_r8_n8(uint8_t* reg, uint8_t memory[], CPU* cpu) {
+    uint8_t value = memory[cpu->pc++];
+    uint8_t before = *reg;
+    uint8_t result = *reg - value;
+
+    // Zero flag
+    if (result == 0)
+        set_flag(&cpu->af.F, FLAG_Z);
+    else
+        unset_flag(&cpu->af.F, FLAG_Z);
+
+    // Subtract flag = 1 (porque es resta)
+    set_flag(&cpu->af.F, FLAG_N);
+
+    // Half-carry: si hubo préstamo del bit 4 (nibble bajo)
+    if ((before & 0x0F) < (value & 0x0F))
+        set_flag(&cpu->af.F, FLAG_H);
+    else
+        unset_flag(&cpu->af.F, FLAG_H);
+
+    // Carry: si el resultado fue negativo
+    if (before < value)
+        set_flag(&cpu->af.F, FLAG_C);
+    else
+        unset_flag(&cpu->af.F, FLAG_C);
+
+    *reg = result;
+    cpu->cycles += 8;
+}
+
 
 void sub_r8_p16(uint8_t* reg, uint16_t* addr, uint8_t memory[], CPU* cpu) {
     uint8_t value = memory[*addr];
@@ -702,9 +761,33 @@ void return_nz(uint8_t memory[], CPU* cpu){ // Goes to adress saved in sp (stack
         cpu->cycles += 8;
     }
 }
+void return_nc(uint8_t memory[], CPU* cpu){ // Goes to adress saved in sp (stack)
+    // If FLAG CARRY = 0
+    if (!(cpu->af.F & FLAG_C)) {
+        uint8_t low = memory[cpu->sp];
+        uint8_t high = memory[cpu->sp + 1];
+        cpu->pc = (high << 8) | low;
+        cpu->sp += 2;
+        cpu->cycles += 20;
+    } else {
+        cpu->cycles += 8;
+    }
+}
 void return_z(uint8_t memory[], CPU* cpu){ // Goes to adress saved in sp (stack)
     // If FLAG ZERO = 1
     if (cpu->af.F & FLAG_Z) {
+        uint8_t low = memory[cpu->sp];
+        uint8_t high = memory[cpu->sp + 1];
+        cpu->pc = (high << 8) | low;
+        cpu->sp += 2;
+        cpu->cycles += 20;
+    } else {
+        cpu->cycles += 8;
+    }
+}
+void return_c(uint8_t memory[], CPU* cpu){ // Goes to adress saved in sp (stack)
+    // If FLAG ZERO = 1
+    if (cpu->af.F & FLAG_C) {
         uint8_t low = memory[cpu->sp];
         uint8_t high = memory[cpu->sp + 1];
         cpu->pc = (high << 8) | low;
@@ -740,11 +823,33 @@ void jump_pointer_nz_a16(uint8_t memory[], CPU* cpu){
         cpu->cycles += 12;
     }
 }
+void jump_pointer_nc_a16(uint8_t memory[], CPU* cpu){
+    uint8_t low = memory[cpu->pc++];
+    uint8_t high = memory[cpu->pc++];
+    uint16_t addr = (high << 8) | low;
+    if (!(cpu->af.F & FLAG_C)) {
+        cpu->pc = (high << 8) | low;
+        cpu->cycles += 16;
+    } else {
+        cpu->cycles += 12;
+    }
+}
 void jump_pointer_z_a16(uint8_t memory[], CPU* cpu){
     uint8_t low = memory[cpu->pc++];
     uint8_t high = memory[cpu->pc++];
     uint16_t addr = (high << 8) | low;
     if (cpu->af.F & FLAG_Z) {
+        cpu->pc = (high << 8) | low;
+        cpu->cycles += 16;
+    } else {
+        cpu->cycles += 12;
+    }
+}
+void jump_pointer_c_a16(uint8_t memory[], CPU* cpu){
+    uint8_t low = memory[cpu->pc++];
+    uint8_t high = memory[cpu->pc++];
+    uint16_t addr = (high << 8) | low;
+    if (cpu->af.F & FLAG_C) {
         cpu->pc = (high << 8) | low;
         cpu->cycles += 16;
     } else {
@@ -774,12 +879,46 @@ void call_nz_a16(uint8_t memory[], CPU* cpu) {
         cpu->cycles += 12;
     }
 }
+void call_nc_a16(uint8_t memory[], CPU* cpu) {
+    uint8_t low = memory[cpu->pc++];
+    uint8_t high = memory[cpu->pc++];
+    uint16_t addr = (high << 8) | low;
+
+    if (!(cpu->af.F & FLAG_C)) {
+        cpu->sp--; // push high byte of PC
+        memory[cpu->sp] = (cpu->pc >> 8) & 0xFF;
+        cpu->sp--; // push low byte of PC
+        memory[cpu->sp] = cpu->pc & 0xFF;
+
+        cpu->pc = addr;
+        cpu->cycles += 24;
+    } else {
+        cpu->cycles += 12;
+    }
+}
 void call_z_a16(uint8_t memory[], CPU* cpu) {
     uint8_t low = memory[cpu->pc++];
     uint8_t high = memory[cpu->pc++];
     uint16_t addr = (high << 8) | low;
 
     if (cpu->af.F & FLAG_Z) {
+        cpu->sp--; // push high byte of PC
+        memory[cpu->sp] = (cpu->pc >> 8) & 0xFF;
+        cpu->sp--; // push low byte of PC
+        memory[cpu->sp] = cpu->pc & 0xFF;
+
+        cpu->pc = addr;
+        cpu->cycles += 24;
+    } else {
+        cpu->cycles += 12;
+    }
+}
+void call_c_a16(uint8_t memory[], CPU* cpu) {
+    uint8_t low = memory[cpu->pc++];
+    uint8_t high = memory[cpu->pc++];
+    uint16_t addr = (high << 8) | low;
+
+    if (cpu->af.F & FLAG_C) {
         cpu->sp--; // push high byte of PC
         memory[cpu->sp] = (cpu->pc >> 8) & 0xFF;
         cpu->sp--; // push low byte of PC
