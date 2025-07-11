@@ -69,7 +69,9 @@ void dec_p16(uint16_t* reg, uint8_t memory[], CPU* cpu);
 void add_r16_r16(uint16_t* reg, uint16_t* reg2, uint8_t memory[], CPU* cpu);
 void add_r8_r8(uint8_t* reg, uint8_t* reg2, uint8_t memory[], CPU* cpu);
 void add_r8_p16(uint8_t* reg, uint16_t* reg2, uint8_t memory[], CPU* cpu);
+void add_r8_n8(uint8_t* reg, uint8_t memory[], CPU* cpu);
 void adc_r8_r8(uint8_t* reg, uint8_t* reg2, uint8_t memory[], CPU* cpu);
+void adc_r8_n8(uint8_t* reg, uint8_t memory[], CPU* cpu);
 void adc_r8_p16(uint8_t* reg, uint16_t* reg2, uint8_t memory[], CPU* cpu);
 void sub_r8_r8(uint8_t* reg, uint8_t* reg2, uint8_t memory[], CPU* cpu);
 void sub_r8_p16(uint8_t* reg, uint16_t* reg2, uint8_t memory[], CPU* cpu);
@@ -97,6 +99,18 @@ void jump_register_nz_e8(uint8_t memory[], CPU* cpu);
 void jump_register_z_e8(uint8_t memory[], CPU* cpu);
 void jump_register_nc_e8(uint8_t memory[], CPU* cpu);
 void jump_register_c_e8(uint8_t memory[], CPU* cpu);
+void jump_pointer_nz_a16(uint8_t memory[], CPU* cpu);
+void jump_pointer_z_a16(uint8_t memory[], CPU* cpu);
+void jump_pointer_a16(uint8_t memory[], CPU* cpu);
+void call_nz_a16(uint8_t memory[], CPU* cpu);
+void call_z_a16(uint8_t memory[], CPU* cpu);
+void call_a16(uint8_t memory[], CPU* cpu);
+void return_nz(uint8_t memory[], CPU* cpu);
+void return_z(uint8_t memory[], CPU* cpu);
+void return_(uint8_t memory[], CPU* cpu);
+void pop_r16(uint16_t* reg, uint8_t memory[], CPU* cpu);
+void push_r16(uint16_t* reg, uint8_t memory[], CPU* cpu);
+void rst_vec(uint8_t vec, uint8_t memory[], CPU* cpu);
 
 // Miscelaneous
 void dda(uint8_t memory[], CPU* cpu);

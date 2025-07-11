@@ -782,7 +782,70 @@ void emulate_cycle(uint8_t* memory, CPU* cpu) {
             cp_r8_r8(&cpu->af.A, &cpu->af.A, memory, cpu);
             break;
         }
-
+        case 0xC0:{// RET NZ. Goes to adress saved in sp (stack) if FLAG ZERO = 0
+            return_nz(memory, cpu);
+            break;
+        }
+        case 0xC1:{// POP BC. Copies into BC the value stored in the adress pointed by SP.
+            pop_r16(&cpu->bc.BC,memory, cpu);
+            break;
+        }
+        case 0xC2:{// JP NZ, a16. Jumps into a16 if FLAG ZERO = 0
+            jump_pointer_nz_a16(memory, cpu);
+            break;
+        }
+        case 0xC3:{// JP a16. Jumps into a16.
+            jump_pointer_a16(memory, cpu);
+            break;
+        }
+        case 0xC4:{// CALL NZ, a16. Copy current pc to stack and go to a16 if FLAG ZERO = 0
+            call_nz_a16(memory, cpu);
+            break;
+        }
+        case 0xC5:{// PUSH BC. Copy BC to stack.
+            push_r16(&cpu->bc.BC, memory, cpu);
+            break;
+        }
+        case 0xC6:{// ADD A, n8. Sum register A and n8
+            add_r8_n8(&cpu->af.A, memory, cpu);
+            break;
+        }
+        case 0xC7:{// RST $00. Copy current pc to stack and go to vector (0x00)
+            rst_vec(0x00, memory, cpu);
+            break;
+        }
+        case 0xC8:{// RET Z. Go to address saved in stack if FLAG ZERO = 1
+            return_z(memory, cpu);
+            break;
+        }
+        case 0xC9:{// RET. Go to address saved in stack.
+            return_(memory, cpu);
+            break;
+        }
+        case 0xCA:{// JP Z, a16. Jump to a16 if FLAG ZERO = 1
+            jump_pointer_z_a16(memory, cpu);
+            break;
+        }
+        case 0xCB:{// PREFIX. ??? TODO
+            // TODO
+            break;
+        }
+        case 0xCC:{// CALL Z, a16. Save pc into stack and go to adress a16 if FLAG ZERO =1
+            call_z_a16(memory, cpu);
+            break;
+        }
+        case 0xCD:{// CALL a16. Save pc into stack and go to adress a16
+            call_a16(memory, cpu);
+            break;
+        }
+        case 0xCE:{// ADC A, n8. Sum A and n8 and carry flag.
+            adc_r8_n8(&cpu->af.A, memory, cpu);
+            break;
+        }
+        case 0xCF:{// RST $08. Save current pc to stack and go to vector (0x08)
+            rst_vec(0x08, memory, cpu);
+            break;
+        }
 
         default:
             printf("Opcode 0x%02X not implemented\n", opcode);
