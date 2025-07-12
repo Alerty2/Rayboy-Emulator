@@ -61,9 +61,19 @@ void load_a8_r8(uint8_t* reg, uint8_t memory[], CPU* cpu){
     memory[0xFF00 + addr] = *reg;
     cpu->cycles += 12;
 }
+void load_r8_a8(uint8_t* reg, uint8_t memory[], CPU* cpu){
+    uint8_t addr = memory[cpu->pc++];
+    *reg = memory[0xFF00 + addr];
+    cpu->cycles += 12;
+}
 void load_c_r8(uint8_t* reg, uint8_t memory[], CPU* cpu){
     uint8_t addr = cpu->bc.C;
     memory[0xFF00 + addr] = *reg;
+    cpu->cycles += 8;
+}
+void load_r8_c(uint8_t* reg, uint8_t memory[], CPU* cpu){
+    uint8_t addr = cpu->bc.C;
+    *reg = memory[0xFF00 + addr];
     cpu->cycles += 8;
 }
 void load_a16_r8(uint8_t* reg, uint8_t memory[], CPU* cpu){
@@ -71,6 +81,40 @@ void load_a16_r8(uint8_t* reg, uint8_t memory[], CPU* cpu){
     uint8_t high = memory[cpu->pc++];
     uint16_t addr = (high << 8) | low;
     memory[addr] = *reg;
+}
+void load_r8_a16(uint8_t* reg, uint8_t memory[], CPU* cpu){
+    uint8_t low = memory[cpu->pc++];
+    uint8_t high = memory[cpu->pc++];
+    uint16_t addr = (high << 8) | low;
+    *reg = memory[addr];
+}
+void load_hl_sp_e8(uint8_t memory[], CPU* cpu){
+    int8_t value = (int8_t)memory[cpu->pc++]; // Signed 8-bit offset
+    uint16_t sp = cpu->sp;
+    uint16_t result = sp + value;
+
+    // Clear Z and N flags
+    unset_flag(&cpu->af.F, FLAG_Z);
+    unset_flag(&cpu->af.F, FLAG_N);
+
+    // Set H flag if lower nibble carry from bit 3 to bit 4
+    if (((sp & 0x0F) + (value & 0x0F)) > 0x0F)
+        set_flag(&cpu->af.F, FLAG_H);
+    else
+        unset_flag(&cpu->af.F, FLAG_H);
+
+    // Set C flag if carry from bit 7 to bit 8
+    if (((sp & 0xFF) + (value & 0xFF)) > 0xFF)
+        set_flag(&cpu->af.F, FLAG_C);
+    else
+        unset_flag(&cpu->af.F, FLAG_C);
+
+    cpu->hl.HL = result;
+    cpu->cycles += 12;
+}
+void load_sp_hl(uint8_t memory[], CPU* cpu){
+    cpu->sp += cpu->hl.HL;
+    cpu->cycles += 8;
 }
 // Arithmetic instructions (INC, DEC and ADD). Instructions for doing basic arithmetic operations
 void inc_r16(uint16_t* reg, uint8_t memory[], CPU* cpu){ // INC r16. Increments r16 by 1
@@ -551,6 +595,30 @@ void cp_r8_r8(uint8_t* reg, uint8_t* reg2, uint8_t memory[], CPU* cpu){
     else
         unset_flag(&cpu->af.F, FLAG_C);
 }
+void cp_r8_n8(uint8_t* reg, uint8_t memory[], CPU* cpu){
+    uint8_t value = memory[cpu->pc++];
+    uint8_t result = *reg - value;
+    uint8_t before = *reg;
+
+    // Flag Z
+    if (result == 0){
+        set_flag(&cpu->af.F, FLAG_Z);
+    }else{
+        unset_flag(&cpu->af.F, FLAG_Z);
+    }
+    set_flag(&cpu->af.F, FLAG_N);
+    // Half-carry: if borrow from bit 4
+    if ((before & 0x0F) < (value & 0x0F))
+        set_flag(&cpu->af.F, FLAG_H);
+    else
+        unset_flag(&cpu->af.F, FLAG_H);
+
+    // Carry: if borrow from bit 8
+    if (before < value)
+        set_flag(&cpu->af.F, FLAG_C);
+    else
+        unset_flag(&cpu->af.F, FLAG_C);
+}
 void cp_r8_p16(uint8_t* reg, uint16_t* reg2, uint8_t memory[], CPU* cpu){
     uint8_t result = *reg - memory[*reg2];
     uint8_t value = memory[*reg2];
@@ -775,7 +843,23 @@ void or_r8_p16(uint8_t* reg, uint16_t* reg2, uint8_t memory[], CPU* cpu){
     unset_flag(&cpu->af.F, FLAG_H);
     cpu->cycles += 4;
 }
+void or_r8_n8(uint8_t* reg,  uint8_t memory[], CPU* cpu){
+    uint8_t value = memory[cpu->pc++];
+    uint8_t result = *reg | value;
+    *reg = result;
+    // Z flag: set if result is zero
+    if (result == 0)
+        set_flag(&cpu->af.F, FLAG_Z);
+    else
+        unset_flag(&cpu->af.F, FLAG_Z);
+    // N and C are always reset
+    unset_flag(&cpu->af.F, FLAG_N);
+    unset_flag(&cpu->af.F, FLAG_C);
 
+    // H is always set in AND
+    set_flag(&cpu->af.F, FLAG_H);
+    cpu->cycles += 8;
+}
 void cpl(uint8_t memory[], CPU* cpu){ // CPL. Biwise not
     cpu->af.A = ~cpu->af.A; // Bitwise NOT over A register
     set_flag(&cpu->af.F, FLAG_N);

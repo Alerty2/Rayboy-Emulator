@@ -966,6 +966,65 @@ void emulate_cycle(uint8_t* memory, CPU* cpu) {
             rst_vec(0x28, memory, cpu);
             break;
         }
+        case 0xF0:{// LDH A, [a8] .Copy a8 into A
+            load_r8_a8(&cpu->af.A, memory, cpu);
+            break;
+        }
+        case 0xF1:{// POP AF. Load sp (stack) into AF
+            pop_r16(&cpu->af.AF, memory, cpu);
+            break;
+        }
+        case 0xF2:{// LDH A, [C]. Load relative C into A
+            load_r8_c(&cpu->af.A, memory, cpu);
+            break;
+        }
+        case 0xF3:{// DI. TODO
+            break;
+        }
+        case 0xF4:{// NO INSTRUCTION
+            break;
+        }
+        case 0xF5:{// PUSH AF. Copy current pc int ostack.
+            push_r16(&cpu->af.AF, memory, cpu);
+            break;
+        }
+        case 0xF6:{// OR A, n8. Bitwise OR between A and n8 parameter
+            or_r8_n8(&cpu->af.A, memory, cpu);
+            break;
+        }
+        case 0xF7:{// RST $30. Save current pc to stack and go to 0x30
+            rst_vec(0x30, memory, cpu);
+            break;
+        }
+        case 0xF8:{// LD HL, SP + e8. Add SP to e8 and copy it to HL
+            load_hl_sp_e8(memory, cpu);
+            break;
+        }
+        case 0xF9:{// LD SP, HL. Copy HL into SP
+            load_sp_hl(memory, cpu);
+            break;
+        }
+        case 0xFA:{// LD A, [a16]. Copy HL into SP
+            load_r8_a16(&cpu->af.A, memory, cpu);
+            break;
+        }
+        case 0xFB:{// EI. TODO
+            break;
+        }
+        case 0xFC:{// NO INSTRUCTION
+            break;
+        }
+        case 0xFD:{// NO INSTRUCTION
+            break;
+        }
+        case 0xFE:{// CP A, n8.
+            cp_r8_n8(&cpu->af.A, memory, cpu);
+            break;
+        }
+        case 0xFF:{// RST $38. Save current pc to stack and go to 0x38
+            rst_vec(0x38, memory, cpu);
+            break;
+        }
         default:
             printf("Opcode 0x%02X not implemented\n", opcode);
             break;
