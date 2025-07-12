@@ -59,8 +59,13 @@ void load_r8_p16_plus(uint8_t* reg, uint16_t* reg2, uint8_t memory[], CPU* cpu);
 void load_r8_p16_minus(uint8_t* reg, uint16_t* reg2, uint8_t memory[], CPU* cpu);
 void load_r8_r8(uint8_t* reg, uint8_t* reg2, uint8_t memory[], CPU* cpu);
 void load_a8_r8(uint8_t* reg, uint8_t memory[], CPU* cpu);
+void load_r8_a8(uint8_t* reg, uint8_t memory[], CPU* cpu);
 void load_a16_r8(uint8_t* reg, uint8_t memory[], CPU* cpu);
+void load_r8_a16(uint8_t* reg, uint8_t memory[], CPU* cpu);
 void load_c_r8(uint8_t* reg, uint8_t memory[], CPU* cpu);
+void load_r8_c(uint8_t* reg, uint8_t memory[], CPU* cpu);
+void load_hl_sp_e8(uint8_t memory[], CPU* cpu);
+void load_sp_hl(uint8_t memory[], CPU* cpu);
 
 // Arithmetic instructions (INC, DEC and ADD). Instructions for doing basic arithmetic operations
 void inc_r16(uint16_t* reg, uint8_t memory[], CPU* cpu);
@@ -84,6 +89,7 @@ void sbc_r8_r8(uint8_t* reg, uint8_t* reg2, uint8_t memory[], CPU* cpu);
 void sbc_r8_n8(uint8_t* reg, uint8_t memory[], CPU* cpu);
 void sbc_r8_p16(uint8_t* reg, uint16_t* reg2, uint8_t memory[], CPU* cpu);
 void cp_r8_r8(uint8_t* reg, uint8_t* reg2, uint8_t memory[], CPU* cpu);
+void cp_r8_n8(uint8_t* reg, uint8_t memory[], CPU* cpu);
 void cp_r8_p16(uint8_t* reg, uint16_t* reg2, uint8_t memory[], CPU* cpu);
 
 // Binary operations
@@ -100,6 +106,7 @@ void xor_r8_n8(uint8_t* reg,  uint8_t memory[], CPU* cpu);
 void xor_r8_p16(uint8_t* reg, uint16_t* reg2, uint8_t memory[], CPU* cpu);
 void or_r8_r8(uint8_t* reg, uint8_t* reg2, uint8_t memory[], CPU* cpu);
 void or_r8_p16(uint8_t* reg, uint16_t* reg2, uint8_t memory[], CPU* cpu);
+void or_r8_n8(uint8_t* reg,  uint8_t memory[], CPU* cpu);
 
 // Jumps and conditionals
 void jump_register_e8(uint8_t memory[], CPU* cpu);
