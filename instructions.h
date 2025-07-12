@@ -58,6 +58,9 @@ void load_p16_r8_minus(uint16_t* reg, uint8_t* reg2, uint8_t memory[], CPU* cpu)
 void load_r8_p16_plus(uint8_t* reg, uint16_t* reg2, uint8_t memory[], CPU* cpu);
 void load_r8_p16_minus(uint8_t* reg, uint16_t* reg2, uint8_t memory[], CPU* cpu);
 void load_r8_r8(uint8_t* reg, uint8_t* reg2, uint8_t memory[], CPU* cpu);
+void load_a8_r8(uint8_t* reg, uint8_t memory[], CPU* cpu);
+void load_a16_r8(uint8_t* reg, uint8_t memory[], CPU* cpu);
+void load_c_r8(uint8_t* reg, uint8_t memory[], CPU* cpu);
 
 // Arithmetic instructions (INC, DEC and ADD). Instructions for doing basic arithmetic operations
 void inc_r16(uint16_t* reg, uint8_t memory[], CPU* cpu);
@@ -67,6 +70,7 @@ void dec_r8(uint8_t* reg, uint8_t memory[], CPU* cpu);
 void dec_r16(uint16_t* reg, uint8_t memory[], CPU* cpu);
 void dec_p16(uint16_t* reg, uint8_t memory[], CPU* cpu);
 void add_r16_r16(uint16_t* reg, uint16_t* reg2, uint8_t memory[], CPU* cpu);
+void add_sp_e8(uint8_t memory[], CPU* cpu);
 void add_r8_r8(uint8_t* reg, uint8_t* reg2, uint8_t memory[], CPU* cpu);
 void add_r8_p16(uint8_t* reg, uint16_t* reg2, uint8_t memory[], CPU* cpu);
 void add_r8_n8(uint8_t* reg, uint8_t memory[], CPU* cpu);
@@ -89,8 +93,10 @@ void rrca(uint8_t memory[], CPU* cpu);
 void rra(uint8_t memory[], CPU* cpu);
 void cpl(uint8_t memory[], CPU* cpu);
 void and_r8_r8(uint8_t* reg, uint8_t* reg2, uint8_t memory[], CPU* cpu);
+void and_r8_n8(uint8_t* reg,  uint8_t memory[], CPU* cpu);
 void and_r8_p16(uint8_t* reg, uint16_t* reg2, uint8_t memory[], CPU* cpu);
 void xor_r8_r8(uint8_t* reg, uint8_t* reg2, uint8_t memory[], CPU* cpu);
+void xor_r8_n8(uint8_t* reg,  uint8_t memory[], CPU* cpu);
 void xor_r8_p16(uint8_t* reg, uint16_t* reg2, uint8_t memory[], CPU* cpu);
 void or_r8_r8(uint8_t* reg, uint8_t* reg2, uint8_t memory[], CPU* cpu);
 void or_r8_p16(uint8_t* reg, uint16_t* reg2, uint8_t memory[], CPU* cpu);
@@ -106,6 +112,7 @@ void jump_pointer_nc_a16(uint8_t memory[], CPU* cpu);
 void jump_pointer_z_a16(uint8_t memory[], CPU* cpu);
 void jump_pointer_c_a16(uint8_t memory[], CPU* cpu);
 void jump_pointer_a16(uint8_t memory[], CPU* cpu);
+void jump_pointer_HL(uint8_t memory[], CPU* cpu);
 void call_nz_a16(uint8_t memory[], CPU* cpu);
 void call_nc_a16(uint8_t memory[], CPU* cpu);
 void call_z_a16(uint8_t memory[], CPU* cpu);

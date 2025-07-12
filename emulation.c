@@ -907,7 +907,65 @@ void emulate_cycle(uint8_t* memory, CPU* cpu) {
             rst_vec(0x18, memory, cpu);
             break;
         }
-
+        case 0xE0:{// LDH [a8], A. Copy value in A into a8
+            load_a8_r8(&cpu->af.A, memory, cpu);
+            break;
+        }
+        case 0xE1:{// POP HL. Save stack into HL
+            pop_r16(&cpu->hl.HL, memory, cpu);
+            break;
+        }
+        case 0xE2:{// LDH [C], A. Copy A into C
+            load_c_r8(&cpu->bc.C, memory, cpu);
+            break;
+        }
+        case 0xE3:{// NO INSTRUCTION
+            break;
+        }
+        case 0xE4:{// NO INSTRUCTION
+            break;
+        }
+        case 0xE5:{// PUSH HL. Save current pc into stack.
+            push_r16(&cpu->hl.HL, memory, cpu);
+            break;
+        }
+        case 0xE6:{// AND A, n8. Bitwise and between A and n8 parameter.
+            and_r8_n8(&cpu->af.A, memory, cpu);
+            break;
+        }
+        case 0xE7:{// RST $20. Save current pc to stack and go to 0x20
+            rst_vec(0x20, memory, cpu);
+            break;
+        }
+        case 0xE8:{// ADD SP, e8. Sum signed 8 bit and sp (stack)
+            add_sp_e8(memory, cpu);
+            break;
+        }
+        case 0xE9:{// JP HL. Jump to address stored in HL.
+            jump_pointer_HL(memory, cpu);
+            break;
+        }
+        case 0xEA:{// LD [a16], A. Copy A into a16
+            load_a16_r8(&cpu->af.A, memory, cpu);
+            break;
+        }
+        case 0xEB:{// NO INSTRUCTION.
+            break;
+        }
+        case 0xEC:{// NO INSTRUCTION.
+            break;
+        }
+        case 0xED:{// NO INSTRUCTION.
+            break;
+        }
+        case 0xEE:{// XOR A, n8. Bitwise XOR between A and n8 parameter.
+            xor_r8_n8(&cpu->af.A, memory, cpu);
+            break;
+        }
+        case 0xEF:{// RST $28. Copy current sp to stack and go to 0x28
+            rst_vec(0x28, memory, cpu);
+            break;
+        }
         default:
             printf("Opcode 0x%02X not implemented\n", opcode);
             break;
