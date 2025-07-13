@@ -662,6 +662,102 @@ void rlca(uint8_t memory[], CPU* cpu){ // RLCA. Rotate register A left.
 
     cpu->cycles += 4;
 }
+void rlc_r8(uint8_t* reg, uint8_t memory[], CPU* cpu){
+    uint8_t value = *reg;
+    uint8_t carry = (value & 0x80) >> 7; // Save bit 7
+
+    value = (value << 1) | carry; // Rotate left, bit 7 as the new bit 0
+
+    *reg = value;
+
+    // Flags
+    if (value == 0)
+        set_flag(&cpu->af.F, FLAG_Z);
+    else
+        unset_flag(&cpu->af.F, FLAG_Z);
+
+    unset_flag(&cpu->af.F, FLAG_N);
+    unset_flag(&cpu->af.F, FLAG_H);
+
+    if (carry)
+        set_flag(&cpu->af.F, FLAG_C);
+    else
+        unset_flag(&cpu->af.F, FLAG_C);
+
+    cpu->cycles += 8; // O 16 si operas con (HL)
+}
+void rlc_p16(uint16_t* reg, uint8_t memory[], CPU* cpu){
+    uint8_t value = memory[*reg];
+    uint8_t carry = (value & 0x80) >> 7; // Save bit 7
+
+    value = (value << 1) | carry; // Rotate left, bit 7 as the new bit 0
+
+    *reg = value;
+
+    // Flags
+    if (value == 0)
+        set_flag(&cpu->af.F, FLAG_Z);
+    else
+        unset_flag(&cpu->af.F, FLAG_Z);
+
+    unset_flag(&cpu->af.F, FLAG_N);
+    unset_flag(&cpu->af.F, FLAG_H);
+
+    if (carry)
+        set_flag(&cpu->af.F, FLAG_C);
+    else
+        unset_flag(&cpu->af.F, FLAG_C);
+
+    cpu->cycles += 8; // O 16 si operas con (HL)
+}
+void rrc_r8(uint8_t* reg, uint8_t memory[], CPU* cpu){
+    uint8_t value = *reg;
+    uint8_t carry = value & 0x01; // Save bit 7
+
+    value = (value >> 1) | (carry << 7); // Rotate right, bit 0 as the new bit 7
+
+    *reg = value;
+
+    // Flags
+    if (value == 0)
+        set_flag(&cpu->af.F, FLAG_Z);
+    else
+        unset_flag(&cpu->af.F, FLAG_Z);
+
+    unset_flag(&cpu->af.F, FLAG_N);
+    unset_flag(&cpu->af.F, FLAG_H);
+
+    if (carry)
+        set_flag(&cpu->af.F, FLAG_C);
+    else
+        unset_flag(&cpu->af.F, FLAG_C);
+
+    cpu->cycles += 8; // O 16 si operas con (HL)
+}
+void rrc_p16(uint16_t* reg, uint8_t memory[], CPU* cpu){
+    uint8_t value = memory[*reg];
+    uint8_t carry = value & 0x01; // Save bit 7
+
+    value = (value >> 1) | (carry << 7); // Rotate right, bit 0 as the new bit 7
+
+    *reg = value;
+
+    // Flags
+    if (value == 0)
+        set_flag(&cpu->af.F, FLAG_Z);
+    else
+        unset_flag(&cpu->af.F, FLAG_Z);
+
+    unset_flag(&cpu->af.F, FLAG_N);
+    unset_flag(&cpu->af.F, FLAG_H);
+
+    if (carry)
+        set_flag(&cpu->af.F, FLAG_C);
+    else
+        unset_flag(&cpu->af.F, FLAG_C);
+
+    cpu->cycles += 8; // O 16 si operas con (HL)
+}
 void rla(uint8_t memory[], CPU* cpu){ // RLA. Moves to the left and saves bit 7 in carry
     uint8_t old_bit7 = (cpu->af.A & 0x80) >> 7; // Save bit 7
     uint8_t old_carry = (cpu->af.F & (1 << 4)) ? 1 : 0; // Extracts old carry from Carry Flag

@@ -826,8 +826,78 @@ void emulate_cycle(uint8_t* memory, CPU* cpu) {
             jump_pointer_z_a16(memory, cpu);
             break;
         }
-        case 0xCB:{// PREFIX. ??? TODO
-            // TODO
+        case 0xCB:{// PREFIX. Makes different binary operations depending on the parameter
+            uint8_t cb_opcode = memory[cpu->pc++];
+            switch (cb_opcode) {
+                case 0x00:{ // RLC B. Rotate byte to left
+                    rlc_r8(&cpu->bc.B, memory, cpu);
+                    break;
+                }
+                case 0x01:{ // RLC C. Rotate byte to left
+                    rlc_r8(&cpu->bc.C, memory, cpu);
+                    break;
+                }
+                case 0x02:{ // RLC D. Rotate byte to left
+                    rlc_r8(&cpu->de.D, memory, cpu);
+                    break;
+                }
+                case 0x03:{ // RLC E. Rotate byte to left
+                    rlc_r8(&cpu->de.E, memory, cpu);
+                    break;
+                }
+                case 0x04:{ // RLC H. Rotate byte to left
+                    rlc_r8(&cpu->hl.H, memory, cpu);
+                    break;
+                }
+                case 0x05:{ // RLC L. Rotate byte to left
+                    rlc_r8(&cpu->hl.L, memory, cpu);
+                    break;
+                }
+                case 0x06:{ // RLC [HL]. Rotate byte pointed by HL to left
+                    rlc_p16(&cpu->hl.HL, memory, cpu);
+                    break;
+                }
+                case 0x07:{ // RLC A. Rotate byte to left
+                    rlc_r8(&cpu->af.A, memory, cpu);
+                    break;
+                }
+                case 0x08:{ // RRC B. Rotate byte to right
+                    rrc_r8(&cpu->bc.B, memory, cpu);
+                    break;
+                }
+                case 0x09:{ // RRC C. Rotate byte to right
+                    rrc_r8(&cpu->bc.C, memory, cpu);
+                    break;
+                }
+                case 0x0A:{ // RRC D. Rotate byte to right
+                    rrc_r8(&cpu->de.D, memory, cpu);
+                    break;
+                }
+                case 0x0B:{ // RRC E. Rotate byte to right
+                    rrc_r8(&cpu->de.E, memory, cpu);
+                    break;
+                }
+                case 0x0C:{ // RRC H. Rotate byte to right
+                    rrc_r8(&cpu->hl.H, memory, cpu);
+                    break;
+                }
+                case 0x0D:{ // RRC L. Rotate byte to right
+                    rrc_r8(&cpu->hl.L, memory, cpu);
+                    break;
+                }
+                case 0x0E:{ // RRC [HL]. Rotate byte pointed by HL to right
+                    rrc_p16(&cpu->hl.HL, memory, cpu);
+                    break;
+                }
+                case 0x0F:{ // RRC A. Rotate byte to right
+                    rrc_r8(&cpu->af.A, memory, cpu);
+                    break;
+                }
+
+                default: {
+                    printf("Invalid CB PREFIX instruction\n");
+                }
+            }
             break;
         }
         case 0xCC:{// CALL Z, a16. Save pc into stack and go to adress a16 if FLAG ZERO =1
