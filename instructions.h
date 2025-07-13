@@ -94,6 +94,10 @@ void cp_r8_p16(uint8_t* reg, uint16_t* reg2, uint8_t memory[], CPU* cpu);
 
 // Binary operations
 void rlca(uint8_t memory[], CPU* cpu);
+void rlc_r8(uint8_t* reg, uint8_t memory[], CPU* cpu);
+void rlc_p16(uint16_t* reg, uint8_t memory[], CPU* cpu);
+void rrc_r8(uint8_t* reg, uint8_t memory[], CPU* cpu);
+void rrc_p16(uint16_t* reg, uint8_t memory[], CPU* cpu);
 void rla(uint8_t memory[], CPU* cpu);
 void rrca(uint8_t memory[], CPU* cpu);
 void rra(uint8_t memory[], CPU* cpu);
