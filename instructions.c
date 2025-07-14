@@ -1054,6 +1054,101 @@ void or_r8_n8(uint8_t* reg,  uint8_t memory[], CPU* cpu){
     set_flag(&cpu->af.F, FLAG_H);
     cpu->cycles += 8;
 }
+void sla_r8(uint8_t* reg, uint8_t memory[], CPU* cpu){
+    uint8_t value = *reg;
+    uint8_t carry = (value & 0x80) >> 7; // Save bit 7
+    value = (value << 1); // Rotate left, bit 0 = 0
+
+    *reg = value;
+
+    // Flags
+    if (value == 0)
+        set_flag(&cpu->af.F, FLAG_Z);
+    else
+        unset_flag(&cpu->af.F, FLAG_Z);
+
+    unset_flag(&cpu->af.F, FLAG_N);
+    unset_flag(&cpu->af.F, FLAG_H);
+
+    if (carry)
+        set_flag(&cpu->af.F, FLAG_C);
+    else
+        unset_flag(&cpu->af.F, FLAG_C);
+
+    cpu->cycles += 8;
+}
+void sla_p16(uint16_t* reg, uint8_t memory[], CPU* cpu){
+    uint8_t value = memory[*reg];
+    uint8_t carry = (value & 0x80) >> 7; // Save bit 7
+    value = (value << 1); // Rotate left, bit 0 = 0
+
+    *reg = value;
+
+    // Flags
+    if (value == 0)
+        set_flag(&cpu->af.F, FLAG_Z);
+    else
+        unset_flag(&cpu->af.F, FLAG_Z);
+
+    unset_flag(&cpu->af.F, FLAG_N);
+    unset_flag(&cpu->af.F, FLAG_H);
+
+    if (carry)
+        set_flag(&cpu->af.F, FLAG_C);
+    else
+        unset_flag(&cpu->af.F, FLAG_C);
+
+    cpu->cycles += 16;
+}
+void sra_r8(uint8_t* reg, uint8_t memory[], CPU* cpu){
+    uint8_t value = *reg;
+    uint8_t carry = value & 0x01; // Save bit 0
+    uint8_t msb = value & 0x80; // Save bit 7
+    value = (value >> 1) | msb; // Rotate right.
+
+    *reg = value;
+
+    // Flags
+    if (value == 0)
+        set_flag(&cpu->af.F, FLAG_Z);
+    else
+        unset_flag(&cpu->af.F, FLAG_Z);
+
+    unset_flag(&cpu->af.F, FLAG_N);
+    unset_flag(&cpu->af.F, FLAG_H);
+
+    if (carry)
+        set_flag(&cpu->af.F, FLAG_C);
+    else
+        unset_flag(&cpu->af.F, FLAG_C);
+
+    cpu->cycles += 8;
+}
+void sra_p16(uint16_t* reg, uint8_t memory[], CPU* cpu){
+    uint8_t value = memory[*reg];
+    uint8_t carry = value & 0x01; // Save bit 0
+    uint8_t msb = value & 0x80; // Save bit 7
+    value = (value >> 1) | msb; // Rotate right.
+
+    *reg = value;
+
+    // Flags
+    if (value == 0)
+        set_flag(&cpu->af.F, FLAG_Z);
+    else
+        unset_flag(&cpu->af.F, FLAG_Z);
+
+    unset_flag(&cpu->af.F, FLAG_N);
+    unset_flag(&cpu->af.F, FLAG_H);
+
+    if (carry)
+        set_flag(&cpu->af.F, FLAG_C);
+    else
+        unset_flag(&cpu->af.F, FLAG_C);
+
+    cpu->cycles += 16;
+}
+// Jump, confitionals, etc...
 void cpl(uint8_t memory[], CPU* cpu){ // CPL. Biwise not
     cpu->af.A = ~cpu->af.A; // Bitwise NOT over A register
     set_flag(&cpu->af.F, FLAG_N);
