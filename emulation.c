@@ -893,6 +893,70 @@ void emulate_cycle(uint8_t* memory, CPU* cpu) {
                     rrc_r8(&cpu->af.A, memory, cpu);
                     break;
                 }
+                case 0x10:{ // RL B. Rotate B bits to the left and bit 0 = carry
+                    rl_r8(&cpu->bc.B, memory, cpu);
+                    break;
+                }
+                case 0x11:{ // RL C. Rotate C bits to the left and bit 0 = carry
+                    rl_r8(&cpu->bc.C, memory, cpu);
+                    break;
+                }
+                case 0x12:{ // RL D. Rotate D bits to the left and bit 0 = carry
+                    rl_r8(&cpu->de.D, memory, cpu);
+                    break;
+                }
+                case 0x13:{ // RL E. Rotate E bits to the left and bit 0 = carry
+                    rl_r8(&cpu->de.E, memory, cpu);
+                    break;
+                }
+                case 0x14:{ // RL H. Rotate H bits to the left and bit 0 = carry
+                    rl_r8(&cpu->hl.H, memory, cpu);
+                    break;
+                }
+                case 0x15:{ // RL L. Rotate L bits to the left and bit 0 = carry
+                    rl_r8(&cpu->hl.L, memory, cpu);
+                    break;
+                }
+                case 0x16:{ // RL [HL]. Rotate register pointed by HL bits to the left and bit 0 = carry
+                    rl_p16(&cpu->hl.HL, memory, cpu);
+                    break;
+                }
+                case 0x17:{ // RL A. Rotate A bits to the left and bit 0 = carry
+                    rl_r8(&cpu->af.A, memory, cpu);
+                    break;
+                }
+                case 0x18:{ // RR B. Rotate B bits to the right and bit carry = 0
+                    rr_r8(&cpu->bc.B, memory, cpu);
+                    break;
+                }
+                case 0x19:{ // RR C. Rotate C bits to the right and bit carry = 0
+                    rr_r8(&cpu->bc.C, memory, cpu);
+                    break;
+                }
+                case 0x1A:{ // RR D. Rotate D bits to the right and bit carry = 0
+                    rr_r8(&cpu->de.D, memory, cpu);
+                    break;
+                }
+                case 0x1B:{ // RR E. Rotate E bits to the right and bit carry = 0
+                    rr_r8(&cpu->de.E, memory, cpu);
+                    break;
+                }
+                case 0x1C:{ // RR H. Rotate H bits to the right and bit carry = 0
+                    rr_r8(&cpu->hl.H, memory, cpu);
+                    break;
+                }
+                case 0x1D:{ // RR L. Rotate L bits to the right and bit carry = 0
+                    rr_r8(&cpu->hl.L, memory, cpu);
+                    break;
+                }
+                case 0x1E:{ // RR [HL]. Rotate register pointed by HL bits to the right and bit carry = 0
+                    rr_p16(&cpu->hl.HL, memory, cpu);
+                    break;
+                }
+                case 0x1F:{ // RR A. Rotate A bits to the right and bit carry = 0
+                    rr_r8(&cpu->af.A, memory, cpu);
+                    break;
+                }
 
                 default: {
                     printf("Invalid CB PREFIX instruction\n");
