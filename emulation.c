@@ -957,6 +957,70 @@ void emulate_cycle(uint8_t* memory, CPU* cpu) {
                     rr_r8(&cpu->af.A, memory, cpu);
                     break;
                 }
+                case 0x20:{ // SLA B. Shift bits to the left and bit 0 = 0
+                    sla_r8(&cpu->bc.B, memory, cpu);
+                    break;
+                }
+                case 0x21:{ // SLA C. Shift bits to the left and bit 0 = 0
+                    sla_r8(&cpu->bc.C, memory, cpu);
+                    break;
+                }
+                case 0x22:{ // SLA D. Shift bits to the left and bit 0 = 0
+                    sla_r8(&cpu->de.D, memory, cpu);
+                    break;
+                }
+                case 0x23:{ // SLA E. Shift bits to the left and bit 0 = 0
+                    sla_r8(&cpu->de.E, memory, cpu);
+                    break;
+                }
+                case 0x24:{ // SLA H. Shift bits to the left and bit 0 = 0
+                    sla_r8(&cpu->hl.H, memory, cpu);
+                    break;
+                }
+                case 0x25:{ // SLA L. Shift bits to the left and bit 0 = 0
+                    sla_r8(&cpu->hl.L, memory, cpu);
+                    break;
+                }
+                case 0x26:{ // SLA [HL]. Shift bits from register pointed by HL to the left and bit 0 = 0
+                    sla_p16(&cpu->hl.HL, memory, cpu);
+                    break;
+                }
+                case 0x27:{ // SLA A. Shift bits to the left and bit 0 = 0
+                    sla_r8(&cpu->af.A, memory, cpu);
+                    break;
+                }
+                case 0x28:{ // SRA B. Shift bits to the right
+                    sra_r8(&cpu->bc.B, memory, cpu);
+                    break;
+                }
+                case 0x29:{ // SRA C. Shift bits to the right
+                    sra_r8(&cpu->bc.C, memory, cpu);
+                    break;
+                }
+                case 0x2A:{ // SRA D. Shift bits to the right
+                    sra_r8(&cpu->de.D, memory, cpu);
+                    break;
+                }
+                case 0x2B:{ // SRA E. Shift bits to the right
+                    sra_r8(&cpu->de.E, memory, cpu);
+                    break;
+                }
+                case 0x2C:{ // SRA H. Shift bits to the right
+                    sra_r8(&cpu->hl.H, memory, cpu);
+                    break;
+                }
+                case 0x2D:{ // SRA L. Shift bits to the right
+                    sra_r8(&cpu->hl.L, memory, cpu);
+                    break;
+                }
+                case 0x2E:{ // SRA [HL]. Shift register pointed by HL to the right
+                    sra_p16(&cpu->hl.HL, memory, cpu);
+                    break;
+                }
+                case 0x2F:{ // SRA A. Shift bits to the right
+                    sra_r8(&cpu->af.A, memory, cpu);
+                    break;
+                }
 
                 default: {
                     printf("Invalid CB PREFIX instruction\n");
