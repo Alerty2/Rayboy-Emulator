@@ -1218,6 +1218,28 @@ void srl_p16(uint16_t* reg, uint8_t memory[], CPU* cpu){
     }
     cpu->cycles += 16;
 }
+void bit_u3_r8(uint8_t bit, uint8_t* reg, uint8_t memory[], CPU* cpu){
+    // If bit number bit is activated, when 1 -> FLAG_Z = 0, when 0 -> FLAG_Z = 1
+    if (!(*reg & (1 << bit))) {
+        set_flag(&cpu->af.F, FLAG_Z);
+    } else {
+        unset_flag(&cpu->af.F, FLAG_Z);
+    }
+    unset_flag(&cpu->af.F, FLAG_N);
+    set_flag(&cpu->af.F, FLAG_H);
+    cpu->cycles += 8;
+}
+void bit_u3_p16(uint8_t bit, uint16_t* reg, uint8_t memory[], CPU* cpu){
+    // If bit number bit is activated, when 1 -> FLAG_Z = 0, when 0 -> FLAG_Z = 1
+    if (!(memory[*reg] & (1 << bit))) {
+        set_flag(&cpu->af.F, FLAG_Z);
+    } else {
+        unset_flag(&cpu->af.F, FLAG_Z);
+    }
+    unset_flag(&cpu->af.F, FLAG_N);
+    set_flag(&cpu->af.F, FLAG_H);
+    cpu->cycles += 8;
+}
 
 // Jump, confitionals, etc...
 void cpl(uint8_t memory[], CPU* cpu){ // CPL. Biwise not
