@@ -119,6 +119,10 @@ void sla_r8(uint8_t* reg, uint8_t memory[], CPU* cpu);
 void sla_p16(uint16_t* reg, uint8_t memory[], CPU* cpu);
 void sra_r8(uint8_t* reg, uint8_t memory[], CPU* cpu);
 void sra_p16(uint16_t* reg, uint8_t memory[], CPU* cpu);
+void swap_r8(uint8_t* reg, uint8_t memory[], CPU* cpu);
+void swap_p16(uint16_t* reg, uint8_t memory[], CPU* cpu);
+void srl_r8(uint8_t* reg, uint8_t memory[], CPU* cpu);
+void srl_p16(uint16_t* reg, uint8_t memory[], CPU* cpu);
 
 // Jumps and conditionals
 void jump_register_e8(uint8_t memory[], CPU* cpu);

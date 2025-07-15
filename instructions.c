@@ -1148,6 +1148,77 @@ void sra_p16(uint16_t* reg, uint8_t memory[], CPU* cpu){
 
     cpu->cycles += 16;
 }
+void swap_r8(uint8_t* reg, uint8_t memory[], CPU* cpu){
+    uint8_t value = *reg;
+    uint8_t result = (value >> 4) | (value << 4);
+    *reg = result;
+
+    if (result == 0){
+        set_flag(&cpu->af.F, FLAG_Z);
+    }else{
+        unset_flag(&cpu->af.F, FLAG_Z);
+    }
+    unset_flag(&cpu->af.F, FLAG_N);
+    unset_flag(&cpu->af.F, FLAG_H);
+    unset_flag(&cpu->af.F, FLAG_C);
+    cpu->cycles += 8;
+}
+void swap_p16(uint16_t* reg, uint8_t memory[], CPU* cpu){
+    uint8_t value = memory[*reg];
+    uint8_t result = (value >> 4) | (value << 4);
+    memory[*reg] = result;
+
+    if (result == 0){
+        set_flag(&cpu->af.F, FLAG_Z);
+    }else{
+        unset_flag(&cpu->af.F, FLAG_Z);
+    }
+    unset_flag(&cpu->af.F, FLAG_N);
+    unset_flag(&cpu->af.F, FLAG_H);
+    unset_flag(&cpu->af.F, FLAG_C);
+    cpu->cycles += 16;
+}
+void srl_r8(uint8_t* reg, uint8_t memory[], CPU* cpu){
+    uint8_t value = *reg;
+    uint8_t carry = value & 0x01; // Save bit 0
+    uint8_t result = (value >> 1);
+    *reg = result;
+    // Flags
+    if (result == 0){
+        set_flag(&cpu->af.F, FLAG_Z);
+    }else{
+        unset_flag(&cpu->af.F, FLAG_Z);
+    }
+    unset_flag(&cpu->af.F, FLAG_N);
+    unset_flag(&cpu->af.F, FLAG_H);
+    if (carry){
+        set_flag(&cpu->af.F, FLAG_C);
+    }else{
+        unset_flag(&cpu->af.F, FLAG_C);
+    }
+    cpu->cycles += 8;
+}
+void srl_p16(uint16_t* reg, uint8_t memory[], CPU* cpu){
+    uint8_t value = memory[*reg];
+    uint8_t carry = value & 0x01; // Save bit 0
+    uint8_t result = (value >> 1);
+    memory[*reg] = result;
+    // Flags
+    if (result == 0){
+        set_flag(&cpu->af.F, FLAG_Z);
+    }else{
+        unset_flag(&cpu->af.F, FLAG_Z);
+    }
+    unset_flag(&cpu->af.F, FLAG_N);
+    unset_flag(&cpu->af.F, FLAG_H);
+    if (carry){
+        set_flag(&cpu->af.F, FLAG_C);
+    }else{
+        unset_flag(&cpu->af.F, FLAG_C);
+    }
+    cpu->cycles += 16;
+}
+
 // Jump, confitionals, etc...
 void cpl(uint8_t memory[], CPU* cpu){ // CPL. Biwise not
     cpu->af.A = ~cpu->af.A; // Bitwise NOT over A register
