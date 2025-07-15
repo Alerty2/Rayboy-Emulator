@@ -11,7 +11,7 @@
 | Input handling              | ✅       |
 | Flags handling              | ✅       |
 | ROM loading                 | ✅       |
-| CPU (304/512 instructions)  | 🚧       |
+| CPU (320/512 instructions)  | 🚧       |
 | Graphics                    | ❌       |
 | Audio                       | ❌       |
 | Cheats & Settings           | ❌       |
