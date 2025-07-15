@@ -1021,6 +1021,70 @@ void emulate_cycle(uint8_t* memory, CPU* cpu) {
                     sra_r8(&cpu->af.A, memory, cpu);
                     break;
                 }
+                case 0x30:{ // SWAP B. Swap the upper 4 bits in register B and the lower 4 ones
+                    swap_r8(&cpu->bc.B, memory, cpu);
+                    break;
+                }
+                case 0x31:{ // SWAP C. Swap the upper 4 bits in register C and the lower 4 ones
+                    swap_r8(&cpu->bc.C, memory, cpu);
+                    break;
+                }
+                case 0x32:{ // SWAP D. Swap the upper 4 bits in register D and the lower 4 ones
+                    swap_r8(&cpu->de.D, memory, cpu);
+                    break;
+                }
+                case 0x33:{ // SWAP E. Swap the upper 4 bits in register E and the lower 4 ones
+                    swap_r8(&cpu->de.E, memory, cpu);
+                    break;
+                }
+                case 0x34:{ // SWAP H. Swap the upper 4 bits in register H and the lower 4 ones
+                    swap_r8(&cpu->hl.H, memory, cpu);
+                    break;
+                }
+                case 0x35:{ // SWAP L. Swap the upper 4 bits in register L and the lower 4 ones
+                    swap_r8(&cpu->hl.L, memory, cpu);
+                    break;
+                }
+                case 0x36:{ // SWAP [HL]. Swap the upper 4 bits in register pointed by HL and the lower 4 ones
+                    swap_p16(&cpu->hl.HL, memory, cpu);
+                    break;
+                }
+                case 0x37:{ // SWAP A. Swap the upper 4 bits in register A and the lower 4 ones
+                    swap_r8(&cpu->af.A, memory, cpu);
+                    break;
+                }
+                case 0x38:{ // SRL B. Shift bits right and bit 0 to FLAG_C
+                    srl_r8(&cpu->bc.B, memory, cpu);
+                    break;
+                }
+                case 0x39:{ // SRL C. Shift bits right and bit 0 to FLAG_C
+                    srl_r8(&cpu->bc.C, memory, cpu);
+                    break;
+                }
+                case 0x3A:{ // SRL D. Shift bits right and bit 0 to FLAG_C
+                    srl_r8(&cpu->de.D, memory, cpu);
+                    break;
+                }
+                case 0x3B:{ // SRL E. Shift bits right and bit 0 to FLAG_C
+                    srl_r8(&cpu->de.E, memory, cpu);
+                    break;
+                }
+                case 0x3C:{ // SRL H. Shift bits right and bit 0 to FLAG_C
+                    srl_r8(&cpu->hl.H, memory, cpu);
+                    break;
+                }
+                case 0x3D:{ // SRL L. Shift bits right and bit 0 to FLAG_C
+                    srl_r8(&cpu->hl.L, memory, cpu);
+                    break;
+                }
+                case 0x3E:{ // SRL [HL]. Shift bits of register pointed by HL right and bit 0 to FLAG_C
+                    srl_p16(&cpu->hl.HL, memory, cpu);
+                    break;
+                }
+                case 0x3F:{ // SRL A. Shift bits right and bit 0 to FLAG_C
+                    srl_r8(&cpu->af.A, memory, cpu);
+                    break;
+                }
 
                 default: {
                     printf("Invalid CB PREFIX instruction\n");
