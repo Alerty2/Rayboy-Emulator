@@ -1149,6 +1149,70 @@ void emulate_cycle(uint8_t* memory, CPU* cpu) {
                     bit_u3_r8(1, &cpu->af.A, memory, cpu);
                     break;
                 }
+                case 0x50:{ // BIT 2, B. If bit number 2 is activated, when 1 -> FLAG_Z = 0, when 0 -> FLAG_Z = 1
+                    bit_u3_r8(2, &cpu->bc.B, memory, cpu);
+                    break;
+                }
+                case 0x51:{ // BIT 2, C. If bit number 2 is activated, when 1 -> FLAG_Z = 0, when 0 -> FLAG_Z = 1
+                    bit_u3_r8(2, &cpu->bc.C, memory, cpu);
+                    break;
+                }
+                case 0x52:{ // BIT 2, D. If bit number 2 is activated, when 1 -> FLAG_Z = 0, when 0 -> FLAG_Z = 1
+                    bit_u3_r8(2, &cpu->de.D, memory, cpu);
+                    break;
+                }
+                case 0x53:{ // BIT 2, E. If bit number 2 is activated, when 1 -> FLAG_Z = 0, when 0 -> FLAG_Z = 1
+                    bit_u3_r8(2, &cpu->de.E, memory, cpu);
+                    break;
+                }
+                case 0x54:{ // BIT 2, H. If bit number 2 is activated, when 1 -> FLAG_Z = 0, when 0 -> FLAG_Z = 1
+                    bit_u3_r8(2, &cpu->hl.H, memory, cpu);
+                    break;
+                }
+                case 0x55:{ // BIT 2, L. If bit number 2 is activated, when 1 -> FLAG_Z = 0, when 0 -> FLAG_Z = 1
+                    bit_u3_r8(2, &cpu->hl.L, memory, cpu);
+                    break;
+                }
+                case 0x56:{ // BIT 2, [HL]. If bit number 2 is activated, when 1 -> FLAG_Z = 0, when 0 -> FLAG_Z = 1
+                    bit_u3_p16(2, &cpu->hl.HL, memory, cpu);
+                    break;
+                }
+                case 0x57:{ // BIT 2, A. If bit number 2 is activated, when 1 -> FLAG_Z = 0, when 0 -> FLAG_Z = 1
+                    bit_u3_r8(2, &cpu->af.A, memory, cpu);
+                    break;
+                }
+                case 0x58:{ // BIT 3, B. If bit number 3 is activated, when 1 -> FLAG_Z = 0, when 0 -> FLAG_Z = 1
+                    bit_u3_r8(3, &cpu->bc.B, memory, cpu);
+                    break;
+                }
+                case 0x59:{ // BIT 3, C. If bit number 3 is activated, when 1 -> FLAG_Z = 0, when 0 -> FLAG_Z = 1
+                    bit_u3_r8(3, &cpu->bc.C, memory, cpu);
+                    break;
+                }
+                case 0x5A:{ // BIT 3, D. If bit number 3 is activated, when 1 -> FLAG_Z = 0, when 0 -> FLAG_Z = 1
+                    bit_u3_r8(3, &cpu->de.D, memory, cpu);
+                    break;
+                }
+                case 0x5B:{ // BIT 3, E. If bit number 3 is activated, when 1 -> FLAG_Z = 0, when 0 -> FLAG_Z = 1
+                    bit_u3_r8(3, &cpu->de.E, memory, cpu);
+                    break;
+                }
+                case 0x5C:{ // BIT 3, H. If bit number 3 is activated, when 1 -> FLAG_Z = 0, when 0 -> FLAG_Z = 1
+                    bit_u3_r8(3, &cpu->hl.H, memory, cpu);
+                    break;
+                }
+                case 0x5D:{ // BIT 3, L .If bit number 3 is activated, when 1 -> FLAG_Z = 0, when 0 -> FLAG_Z = 1
+                    bit_u3_r8(3, &cpu->hl.L, memory, cpu);
+                    break;
+                }
+                case 0x5E:{ // BIT 3, [HL] .If bit number 3 is activated, when 1 -> FLAG_Z = 0, when 0 -> FLAG_Z = 1
+                    bit_u3_p16(3, &cpu->hl.HL, memory, cpu);
+                    break;
+                }
+                case 0x5F:{ // BIT 3, A .If bit number 3 is activated, when 1 -> FLAG_Z = 0, when 0 -> FLAG_Z = 1
+                    bit_u3_r8(3, &cpu->af.A, memory, cpu);
+                    break;
+                }
 
                 default: {
                     printf("Invalid CB PREFIX instruction\n");
