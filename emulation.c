@@ -1273,8 +1273,72 @@ void emulate_cycle(uint8_t* memory, CPU* cpu) {
                     bit_u3_p16(5, &cpu->hl.HL, memory, cpu);
                     break;
                 }
-                case 0x6F:{ // BIT 5, A .If bit number 4 from address pointed by HL is activated, when 1 -> FLAG_Z = 0, when 0 -> FLAG_Z = 1
+                case 0x6F:{ // BIT 5, A .If bit number 4 is activated, when 1 -> FLAG_Z = 0, when 0 -> FLAG_Z = 1
                     bit_u3_r8(5, &cpu->af.A, memory, cpu);
+                    break;
+                }
+                case 0x70:{ // BIT 6, B .If bit number 4 is activated, when 1 -> FLAG_Z = 0, when 0 -> FLAG_Z = 1
+                    bit_u3_r8(6, &cpu->bc.B, memory, cpu);
+                    break;
+                }
+                case 0x71:{ // BIT 6, C .If bit number 4 is activated, when 1 -> FLAG_Z = 0, when 0 -> FLAG_Z = 1
+                    bit_u3_r8(6, &cpu->bc.C, memory, cpu);
+                    break;
+                }
+                case 0x72:{ // BIT 6, D .If bit number 4 is activated, when 1 -> FLAG_Z = 0, when 0 -> FLAG_Z = 1
+                    bit_u3_r8(6, &cpu->de.D, memory, cpu);
+                    break;
+                }
+                case 0x73:{ // BIT 6, E .If bit number 4 is activated, when 1 -> FLAG_Z = 0, when 0 -> FLAG_Z = 1
+                    bit_u3_r8(6, &cpu->de.E, memory, cpu);
+                    break;
+                }
+                case 0x74:{ // BIT 6, H .If bit number 4 is activated, when 1 -> FLAG_Z = 0, when 0 -> FLAG_Z = 1
+                    bit_u3_r8(6, &cpu->hl.H, memory, cpu);
+                    break;
+                }
+                case 0x75:{ // BIT 6, L .If bit number 4 is activated, when 1 -> FLAG_Z = 0, when 0 -> FLAG_Z = 1
+                    bit_u3_r8(6, &cpu->hl.L, memory, cpu);
+                    break;
+                }
+                case 0x76:{ // BIT 6, [HL] .If bit number 4 from address pointed by HL is activated, when 1 -> FLAG_Z = 0, when 0 -> FLAG_Z = 1
+                    bit_u3_p16(6, &cpu->hl.HL, memory, cpu);
+                    break;
+                }
+                case 0x77:{ // BIT 6, A.If bit number 4 is activated, when 1 -> FLAG_Z = 0, when 0 -> FLAG_Z = 1
+                    bit_u3_r8(6, &cpu->af.A, memory, cpu);
+                    break;
+                }
+                case 0x78:{ // BIT 7, B.If bit number 4 is activated, when 1 -> FLAG_Z = 0, when 0 -> FLAG_Z = 1
+                    bit_u3_r8(7, &cpu->bc.B, memory, cpu);
+                    break;
+                }
+                case 0x79:{ // BIT 7, C.If bit number 4 is activated, when 1 -> FLAG_Z = 0, when 0 -> FLAG_Z = 1
+                    bit_u3_r8(7, &cpu->bc.C, memory, cpu);
+                    break;
+                }
+                case 0x7A:{ // BIT 7, D.If bit number 4 is activated, when 1 -> FLAG_Z = 0, when 0 -> FLAG_Z = 1
+                    bit_u3_r8(7, &cpu->de.D, memory, cpu);
+                    break;
+                }
+                case 0x7B:{ // BIT 7, E. If bit number 4 is activated, when 1 -> FLAG_Z = 0, when 0 -> FLAG_Z = 1
+                    bit_u3_r8(7, &cpu->de.E, memory, cpu);
+                    break;
+                }
+                case 0x7C:{ // BIT 7, H. If bit number 4 is activated, when 1 -> FLAG_Z = 0, when 0 -> FLAG_Z = 1
+                    bit_u3_r8(7, &cpu->hl.H, memory, cpu);
+                    break;
+                }
+                case 0x7D:{ // BIT 7, L. If bit number 4 is activated, when 1 -> FLAG_Z = 0, when 0 -> FLAG_Z = 1
+                    bit_u3_r8(7, &cpu->hl.L, memory, cpu);
+                    break;
+                }
+                case 0x7E:{ // BIT 7, [HL]. If bit number 4 from address pointed by HL is activated, when 1 -> FLAG_Z = 0, when 0 -> FLAG_Z = 1
+                    bit_u3_p16(7, &cpu->hl.HL, memory, cpu);
+                    break;
+                }
+                case 0x7F:{ // BIT 7, A. If bit number 4 is activated, when 1 -> FLAG_Z = 0, when 0 -> FLAG_Z = 1
+                    bit_u3_r8(7, &cpu->af.A, memory, cpu);
                     break;
                 }
 
