@@ -1240,6 +1240,23 @@ void bit_u3_p16(uint8_t bit, uint16_t* reg, uint8_t memory[], CPU* cpu){
     set_flag(&cpu->af.F, FLAG_H);
     cpu->cycles += 8;
 }
+void res_u3_r8(uint8_t bit, uint8_t* reg, uint8_t memory[], CPU* cpu) {
+    *reg &= ~(1 << bit);
+    cpu->cycles += 8;
+}
+void res_u3_p16(uint8_t bit, uint16_t* reg, uint8_t memory[], CPU* cpu) {
+    memory[*reg] &= ~(1 << bit);
+    cpu->cycles += 16;
+}
+void set_u3_r8(uint8_t bit, uint8_t* reg, uint8_t memory[], CPU* cpu) {
+    *reg |= (1 << bit);
+    cpu->cycles += 8;
+}
+void set_u3_p16(uint8_t bit, uint16_t* reg, uint8_t memory[], CPU* cpu) {
+    memory[*reg] |= (1 << bit);
+    cpu->cycles += 16;
+}
+
 
 // Jump, confitionals, etc...
 void cpl(uint8_t memory[], CPU* cpu){ // CPL. Biwise not
