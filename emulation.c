@@ -1405,6 +1405,70 @@ void emulate_cycle(uint8_t* memory, CPU* cpu) {
                     res_u3_r8(1, &cpu->af.A, memory, cpu);
                     break;
                 }
+                case 0x90:{ // RES 2, B. Set to 0 bit number 2.
+                    res_u3_r8(2, &cpu->bc.B, memory, cpu);
+                    break;
+                }
+                case 0x91:{ // RES 2, C. Set to 0 bit number 2.
+                    res_u3_r8(2, &cpu->bc.C, memory, cpu);
+                    break;
+                }
+                case 0x92:{ // RES 2, D. Set to 0 bit number 2.
+                    res_u3_r8(2, &cpu->de.D, memory, cpu);
+                    break;
+                }
+                case 0x93:{ // RES 2, E. Set to 0 bit number 2.
+                    res_u3_r8(2, &cpu->de.E, memory, cpu);
+                    break;
+                }
+                case 0x94:{ // RES 2, H. Set to 0 bit number 2.
+                    res_u3_r8(2, &cpu->hl.H, memory, cpu);
+                    break;
+                }
+                case 0x95:{ // RES 2, L. Set to 0 bit number 2.
+                    res_u3_r8(2, &cpu->hl.L, memory, cpu);
+                    break;
+                }
+                case 0x96:{ // RES 2, [HL]. Set to 0 bit number 2 from address pointed by HL
+                    res_u3_p16(2, &cpu->hl.HL, memory, cpu);
+                    break;
+                }
+                case 0x97:{ // RES 2, A. Set to 0 bit number 2.
+                    res_u3_r8(2, &cpu->af.A, memory, cpu);
+                    break;
+                }
+                case 0x98:{ // RES 3, B. Set to 0 bit number 3.
+                    res_u3_r8(3, &cpu->bc.B, memory, cpu);
+                    break;
+                }
+                case 0x99:{ // RES 3, C. Set to 0 bit number 3.
+                    res_u3_r8(3, &cpu->bc.C, memory, cpu);
+                    break;
+                }
+                case 0x9A:{ // RES 3, D. Set to 0 bit number 3.
+                    res_u3_r8(3, &cpu->de.D, memory, cpu);
+                    break;
+                }
+                case 0x9B:{ // RES 3, E. Set to 0 bit number 3.
+                    res_u3_r8(3, &cpu->de.E, memory, cpu);
+                    break;
+                }
+                case 0x9C:{ // RES 3, H. Set to 0 bit number 3.
+                    res_u3_r8(3, &cpu->hl.H, memory, cpu);
+                    break;
+                }
+                case 0x9D:{ // RES 3, H. Set to 0 bit number 3.
+                    res_u3_r8(3, &cpu->hl.L, memory, cpu);
+                    break;
+                }
+                case 0x9E:{ // RES 3, [HL]. Set to 0 bit number 3 from register pointed by HL.
+                    res_u3_p16(3, &cpu->hl.HL, memory, cpu);
+                    break;
+                }
+                case 0x9F:{ // RES 3, A. Set to 0 bit number 3.
+                    res_u3_r8(3, &cpu->af.A, memory, cpu);
+                    break;
+                }
 
                 default: {
                     printf("Invalid CB PREFIX instruction\n");
