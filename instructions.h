@@ -127,6 +127,8 @@ void bit_u3_r8(uint8_t bit, uint8_t* reg, uint8_t memory[], CPU* cpu);
 void bit_u3_p16(uint8_t bit, uint16_t* reg, uint8_t memory[], CPU* cpu);
 void res_u3_r8(uint8_t bit, uint8_t* reg, uint8_t memory[], CPU* cpu);
 void res_u3_p16(uint8_t bit, uint16_t* reg, uint8_t memory[], CPU* cpu);
+void set_u3_r8(uint8_t bit, uint8_t* reg, uint8_t memory[], CPU* cpu);
+void set_u3_p16(uint8_t bit, uint16_t* reg, uint8_t memory[], CPU* cpu);
 
 // Jumps and conditionals
 void jump_register_e8(uint8_t memory[], CPU* cpu);
