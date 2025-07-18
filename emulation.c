@@ -1789,6 +1789,70 @@ void emulate_cycle(uint8_t* memory, CPU* cpu) {
                     set_u3_r8(5, &cpu->af.A, memory, cpu);
                     break;
                 }
+                case 0xF0:{ // SET 6, B. Set to 1 bit number 6.
+                    set_u3_r8(6, &cpu->bc.B, memory, cpu);
+                    break;
+                }
+                case 0xF1:{ // SET 6, C. Set to 1 bit number 6.
+                    set_u3_r8(6, &cpu->bc.C, memory, cpu);
+                    break;
+                }
+                case 0xF2:{ // SET 6, D. Set to 1 bit number 6.
+                    set_u3_r8(6, &cpu->de.D, memory, cpu);
+                    break;
+                }
+                case 0xF3:{ // SET 6, E. Set to 1 bit number 6.
+                    set_u3_r8(6, &cpu->de.E, memory, cpu);
+                    break;
+                }
+                case 0xF4:{ // SET 6, H. Set to 1 bit number 6.
+                    set_u3_r8(6, &cpu->hl.H, memory, cpu);
+                    break;
+                }
+                case 0xF5:{ // SET 6, L. Set to 1 bit number 6.
+                    set_u3_r8(6, &cpu->hl.L, memory, cpu);
+                    break;
+                }
+                case 0xF6:{ // SET 6, [HL]. Set to 1 bit number 6 from address pointed by HL
+                    set_u3_p16(6, &cpu->hl.HL, memory, cpu);
+                    break;
+                }
+                case 0xF7:{ // SET 6, A. Set to 1 bit number 6.
+                    set_u3_r8(6, &cpu->af.A, memory, cpu);
+                    break;
+                }
+                case 0xF8:{ // SET 7, B. Set to 1 bit number 7.
+                    set_u3_r8(7, &cpu->bc.B, memory, cpu);
+                    break;
+                }
+                case 0xF9:{ // SET 7, C. Set to 1 bit number 7.
+                    set_u3_r8(7, &cpu->bc.C, memory, cpu);
+                    break;
+                }
+                case 0xFA:{ // SET 7, D. Set to 1 bit number 7.
+                    set_u3_r8(7, &cpu->de.D, memory, cpu);
+                    break;
+                }
+                case 0xFB:{ // SET 7, E. Set to 1 bit number 7.
+                    set_u3_r8(7, &cpu->de.E, memory, cpu);
+                    break;
+                }
+                case 0xFC:{ // SET 7, H. Set to 1 bit number 7.
+                    set_u3_r8(7, &cpu->hl.H, memory, cpu);
+                    break;
+                }
+                case 0xFD:{ // SET 7, L. Set to 1 bit number 7.
+                    set_u3_r8(7, &cpu->hl.L, memory, cpu);
+                    break;
+                }
+                case 0xFE:{ // SET 7, [HL]. Set to 1 bit number 7 from address pointed by HL
+                    set_u3_p16(7, &cpu->hl.HL, memory, cpu);
+                    break;
+                }
+                case 0xFF:{ // SET 7, A. Set to 1 bit number 7.
+                    set_u3_r8(7, &cpu->af.A, memory, cpu);
+                    break;
+                }
 
                 default: {
                     printf("Invalid CB PREFIX instruction\n");
