@@ -11,7 +11,7 @@
 | Input handling              | ✅       |
 | Flags handling              | ✅       |
 | ROM loading                 | ✅       |
-| CPU (512/512 instructions)  | 🚧(Debugging)|
+| CPU (512/512 instructions)  | ✅       |
 | Graphics                    | ❌       |
 | Audio                       | ❌       |
 | Cheats & Settings           | ❌       |
