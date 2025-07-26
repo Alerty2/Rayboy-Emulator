@@ -12,7 +12,7 @@
 | Flags handling              | ✅       |
 | ROM loading                 | ✅       |
 | CPU (512/512 instructions)  | ✅       |
-| Graphics                    | ❌       |
+| Graphics                    | 🚧 (Work in progress)|
 | Audio                       | ❌       |
 | Cheats & Settings           | ❌       |
 | Game Boy Color              | ❌       |
