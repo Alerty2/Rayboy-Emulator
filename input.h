@@ -13,6 +13,6 @@ extern bool dpad_left;
 extern bool dpad_right;
 
 // Changes I/O memory depending on the keys that are pressed
-void update_input(uint8_t wRAM[]);
+void update_input(uint8_t memory[]);
 
 #endif
