@@ -1,6 +1,6 @@
 #include "input.h"
-void update_input(uint8_t wRAM[]) {
-    uint8_t *joyp = &wRAM[0xFF00 - 0xC000];
+void update_input(uint8_t memory[]) {
+    uint8_t *joyp = &memory[0xFF00];
 
     // Get selection bits (P14/P15) from memory
     uint8_t selection = *joyp & 0x30;  // Keep bits 4–5

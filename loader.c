@@ -1,7 +1,10 @@
 #include "loader.h"
 int load_rom(uint8_t memory[], const char *filename){
+    printf("Trying to open ROM at path: %s\n", filename);  // <-- AÑADIDO
+
     FILE *f = fopen(filename, "rb");
     if (!f) {
+        perror("fopen"); // <-- AÑADIDO
         printf("ROM couldn't be opened\n");
         return -1;
     }

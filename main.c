@@ -23,7 +23,7 @@ int main(int argc, char* argv[])
     }
 
     // Load ROM from provided path
-    if (load_rom(argv[1], memory) < 0) {
+    if (load_rom(memory, argv[1]) < 0) {
         printf("Failed to load ROM: %s\n", argv[1]);
         return 1;
     }
@@ -41,9 +41,10 @@ int main(int argc, char* argv[])
 
     while (!WindowShouldClose())
     {
-        update_input(&input_state);
+        update_input(memory);
         for (int i= 0; i < 69905/4; i++){
             emulate_cycle(memory, &cpu);
+            printf("PC: %04X\n", cpu.pc);
         }
         BeginDrawing();
         ClearBackground(RAYWHITE);

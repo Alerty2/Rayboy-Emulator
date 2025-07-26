@@ -1,5 +1,11 @@
 #include "emulation.h"
 void emulate_cycle(uint8_t* memory, CPU* cpu) {
+    if (cpu->pc >= 0x10000) {
+        printf("Invalid PC: %04X\n", cpu->pc);
+        exit(1);
+    }
+    printf("[PC=%04X] Opcode=%02X\n", cpu->pc, memory[cpu->pc]);
+
     uint8_t opcode = memory[cpu->pc++];
 
     switch (opcode) {
