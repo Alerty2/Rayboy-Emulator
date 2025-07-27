@@ -1,4 +1,4 @@
-#include "emulation.h"
+#include "ppu.h"
 #include "input.h"
 
 // Define the RAM
@@ -10,12 +10,19 @@ uint8_t memory[0x10000];
 
 // Define CPU
 CPU cpu;
+// Define PPU
+PPU ppu;
+// Define MMU addresses
+MMU_ADDRESSES mmu_addresses;
 
 // Input state
 uint8_t input_state;
 
 int main(int argc, char* argv[])
 {
+    memory[0xFF40] = 0x91;  // LCD ON + BG ON + BG Tile Map 0x9C00
+    memory[0xFF47] = 0xE4;  // BGP: 11 10 01 00 (blanco → negro)
+
     // Check if ROM was provided
     if (argc < 2) {
         printf("Usage: %s <rom_file.gb>\n", argv[0]);
@@ -37,18 +44,35 @@ int main(int argc, char* argv[])
     cpu.hl.HL = 0x014D;
     cpu.cycles = 0;
 
-    InitWindow(800, 600, "Rayboy Emulator");
+
+
+
+    // Initialize MMU addresses
+    init_mmu_addresses(&mmu_addresses);
+    // Set default LCD registers
+    memory[0xFF40] = 0x91;  // LCDC: LCD on, BG on
+    memory[0xFF42] = 0x00;  // SCY
+    memory[0xFF43] = 0x00;  // SCX
+    memory[0xFF44] = 0x00;  // LY
+    memory[0xFF47] = 0xE4;  // BGP: White to Black
+    // Initialize PPU state
+    ppu_init(&ppu);
+    set_ppu_mode(memory, &mmu_addresses, 2);
+
+    InitWindow(160, 144, "Rayboy Emulator");
 
     while (!WindowShouldClose())
     {
         update_input(memory);
         for (int i= 0; i < 69905/4; i++){
-            emulate_cycle(memory, &cpu);
+            int cycles = emulate_cycle(memory, &cpu);
+            ppu_step(&ppu, cycles, memory, &mmu_addresses);
+
             printf("PC: %04X\n", cpu.pc);
         }
         BeginDrawing();
         ClearBackground(RAYWHITE);
-        DrawText("Currently no GUI", 190, 200, 20, BLACK);
+        display_frame(&ppu);
         EndDrawing();
     }
 
