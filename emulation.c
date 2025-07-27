@@ -1,5 +1,5 @@
 #include "emulation.h"
-void emulate_cycle(uint8_t* memory, CPU* cpu) {
+int emulate_cycle(uint8_t* memory, CPU* cpu) {
     if (cpu->pc >= 0x10000) {
         printf("Invalid PC: %04X\n", cpu->pc);
         exit(1);
@@ -2065,4 +2065,5 @@ void emulate_cycle(uint8_t* memory, CPU* cpu) {
             printf("Opcode 0x%02X not implemented\n", opcode);
             break;
     }
+    return cpu->cycles;
 }
