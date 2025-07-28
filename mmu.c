@@ -1,8 +1,19 @@
 #include "mmu.h"
 
 void mmu_write(uint8_t memory[], uint16_t address, uint8_t value){
+    // Log para depuración de VRAM
+    if (address >= 0x8000 && address <= 0x9FFF) {
+        printf("[MMU] VRAM write: %04X <- %02X\n", address, value);
+    }
+
+    // Log opcional para registrar escrituras a mapas de tiles
+    if (address >= 0x9800 && address <= 0x9BFF) {
+        printf("[MMU] Tile Map write: %04X <- %02X\n", address, value);
+    }
+
     memory[address] = value;
 }
+
 uint8_t mmu_load(uint8_t memory[], uint16_t address){
     return memory[address];
 }

@@ -2,8 +2,7 @@
 #include "input.h"
 
 // Define the RAM
-uint8_t wRAM[8192];
-uint8_t vRAM[8192];
+//uint8_t wRAM[8192];
 
 // Define the memory
 uint8_t memory[0x10000];
@@ -21,7 +20,7 @@ uint8_t input_state;
 int main(int argc, char* argv[])
 {
     memory[0xFF40] = 0x91;  // LCD ON + BG ON + BG Tile Map 0x9C00
-    memory[0xFF47] = 0xE4;  // BGP: 11 10 01 00 (blanco → negro)
+    memory[0xFF47] = 0xE4;  // BGP: 11 10 01 00
 
     // Check if ROM was provided
     if (argc < 2) {
@@ -34,6 +33,9 @@ int main(int argc, char* argv[])
         printf("Failed to load ROM: %s\n", argv[1]);
         return 1;
     }
+    printf("Tile data base: %02X %02X %02X %02X\n",
+           memory[0x8000], memory[0x8001], memory[0x8002], memory[0x8003]);
+
 
     // Initialize CPU state
     cpu.pc = 0x100;
@@ -66,12 +68,14 @@ int main(int argc, char* argv[])
         update_input(memory);
         for (int i= 0; i < 69905/4; i++){
             int cycles = emulate_cycle(memory, &cpu);
+            printf("LCDC: %02X | LY: %02X | Mode: %d\n", memory[0xFF40], memory[0xFF44], ppu.mode);
             ppu_step(&ppu, cycles, memory, &mmu_addresses);
 
             printf("PC: %04X\n", cpu.pc);
         }
         BeginDrawing();
         ClearBackground(RAYWHITE);
+        //test_frame(&ppu);
         display_frame(&ppu);
         EndDrawing();
     }
