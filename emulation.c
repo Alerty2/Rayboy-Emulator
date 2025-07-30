@@ -1,16 +1,79 @@
 #include "emulation.h"
+void handle_interrupts(uint8_t* memory, CPU* cpu) {
+    if (!cpu->ime) return;
+
+    uint8_t IE = memory[0xFFFF]; // Interrupt Enable
+    uint8_t IF = memory[0xFF0F]; // Interrupt Flag
+
+    uint8_t fired = IE & IF;
+    if (!fired) return;
+
+
+    for (int i = 0; i < 5; i++) {
+        if (fired & (1 << i)) {
+            cpu->ime = 0;
+            memory[0xFF0F] &= ~(1 << i);
+
+            // Push PC to stack
+            cpu->sp -= 2;
+            memory[cpu->sp] = cpu->pc & 0xFF;
+            memory[cpu->sp + 1] = (cpu->pc >> 8) & 0xFF;
+
+            switch (i) {
+                case 0: cpu->pc = 0x40; break; // VBlank
+                case 1: cpu->pc = 0x48; break; // LCD STAT
+                case 2: cpu->pc = 0x50; break; // Timer
+                case 3: cpu->pc = 0x58; break; // Serial
+                case 4: cpu->pc = 0x60; break; // Joypad
+            }
+
+            cpu->cycles += 20;
+            return;
+        }
+    }
+}
+
 int emulate_cycle(uint8_t* memory, CPU* cpu) {
     if (cpu->pc >= 0x10000) {
         printf("Invalid PC: %04X\n", cpu->pc);
         exit(1);
     }
     printf("[PC=%04X] Opcode=%02X\n", cpu->pc, memory[cpu->pc]);
-    printf("A = %d\n", cpu->af.A);
-    printf("B = %d\n", cpu->bc.C);
-    printf("FLAG C:  = %d\n", (cpu->af.F & ( 1 << 4 )) >> 4);
 
 
     uint8_t opcode = memory[cpu->pc++];
+    uint8_t ie = memory[0xFFFF];  // Interrupt Enable
+    uint8_t iflag = memory[0xFF0F]; // Interrupt Flag
+
+    uint8_t interrupt_bits = ie & iflag;
+
+    if (cpu->ime && interrupt_bits) {
+        // Pending interruption
+        for (int i = 0; i < 5; i++) {
+            if (interrupt_bits & (1 << i)) {
+                // Desactivates IME
+                cpu->ime = false;
+
+                // Cleans bit of interruption
+                memory[0xFF0F] &= ~(1 << i);
+
+                // Pushes PC to stack
+                cpu->sp -= 2;
+                memory[cpu->sp] = cpu->pc & 0xFF;
+                memory[cpu->sp + 1] = cpu->pc >> 8;
+
+                // Salta a la dirección de la interrupción
+                static const uint16_t interrupt_vector[5] = {
+                    0x40, 0x48, 0x50, 0x58, 0x60
+                };
+                cpu->pc = interrupt_vector[i];
+
+                cpu->cycles += 20; // Tiempo típico de interrupción
+
+                return 0; // Salimos de este ciclo, ya hemos manejado una interrupción
+            }
+        }
+    }
 
     switch (opcode) {
         case 0x00: // NOP
@@ -1921,8 +1984,11 @@ int emulate_cycle(uint8_t* memory, CPU* cpu) {
             return_c(memory, cpu);
             break;
         }
-        case 0xD9:{// RETI. TODO
-
+        case 0xD9:{// RETI. Interruptions stuff
+            cpu->pc = memory[cpu->sp] | (memory[cpu->sp + 1] << 8);
+            cpu->sp += 2;
+            cpu->ime = 1; // Enable interrupts
+            cpu->cycles += 16;
             break;
         }
         case 0xDA:{// JP C, a16. Jump to a16 if FLAG C = 1
@@ -2018,7 +2084,9 @@ int emulate_cycle(uint8_t* memory, CPU* cpu) {
             load_r8_c(&cpu->af.A, memory, cpu);
             break;
         }
-        case 0xF3:{// DI. TODO
+        case 0xF3:{// DI. Interruptions stuff
+            cpu->ime = false;
+            cpu->cycles += 4;
             break;
         }
         case 0xF4:{// NO INSTRUCTION
@@ -2048,7 +2116,9 @@ int emulate_cycle(uint8_t* memory, CPU* cpu) {
             load_r8_a16(&cpu->af.A, memory, cpu);
             break;
         }
-        case 0xFB:{// EI. TODO
+        case 0xFB:{// EI. Interruptions stuff.
+            cpu->ime = true;
+            cpu->cycles += 4;
             break;
         }
         case 0xFC:{// NO INSTRUCTION
@@ -2069,5 +2139,7 @@ int emulate_cycle(uint8_t* memory, CPU* cpu) {
             printf("Opcode 0x%02X not implemented\n", opcode);
             break;
     }
+
+    handle_interrupts(memory, cpu);
     return cpu->cycles;
 }

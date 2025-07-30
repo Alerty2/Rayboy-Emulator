@@ -1,5 +1,14 @@
 #include "instructions.h"
 
+void debug_vram_write(uint16_t addr, uint8_t value) {
+    if (addr >= 0x8000 && addr <= 0x9FFF) {
+        printf("[WRITE VRAM] @%04X = %02X\n", addr, value);
+    }
+    if (addr >= 0x9800 && addr <= 0x9FFF) {
+        printf("[WRITE TILEMAP] @%04X = %02X\n", addr, value);
+    }
+}
+
 // Loads (LD). Instructions for copying a value into other place
 void load_r16_n16(uint16_t* reg, uint8_t memory[], CPU* cpu){ // Copies a 16-bit number into a 16 bits register
     uint8_t low  = memory[cpu->pc++]; // BC
@@ -9,10 +18,14 @@ void load_r16_n16(uint16_t* reg, uint8_t memory[], CPU* cpu){ // Copies a 16-bit
 }
 void load_p16_n8(uint16_t* reg, uint8_t memory[], CPU* cpu){ // LD [HL],r8. Copy the value in register r8 into the byte pointed to by HL.
     memory[*reg] += memory[cpu->pc++];
+    debug_vram_write(*reg, memory[*reg]);
+    printf("[LD p16, n8] WRITE @%04X = %02X\n", *reg, memory[*reg]);
     cpu->cycles += 12;
 }
 void load_p16_r8(uint16_t* reg, uint8_t* reg2, uint8_t memory[], CPU* cpu){
     memory[*reg] += *reg2;
+    debug_vram_write(*reg, *reg2);
+    printf("[LD p16, r8] WRITE @%04X = %02X\n", *reg, memory[*reg]);
     cpu->cycles += 8;
 }
 void load_r8_n8(uint8_t* reg, uint8_t memory[], CPU* cpu){ // LD r8,n8. Copy the value n8 into register r8.
@@ -26,6 +39,7 @@ void load_a16_SP(uint8_t memory[], CPU* cpu){  // LD [a16], SP . Load SP into im
 
     memory[addr] = cpu->sp & 0xFF; // Low
     memory[addr + 1] = (cpu->sp >> 8); // High
+    printf("[LD [a16], SP] WRITE @%04X = %02X (low), @%04X = %02X (high)\n", addr, memory[addr], addr + 1, memory[addr + 1]);
     cpu->cycles += 20;
 }
 void load_r8_p16(uint8_t* reg, uint16_t* reg2, uint8_t memory[], CPU* cpu){ // LD r8,n8. Copy the value n8 into register r8.
@@ -34,11 +48,15 @@ void load_r8_p16(uint8_t* reg, uint16_t* reg2, uint8_t memory[], CPU* cpu){ // L
 }
 void load_p16_r8_plus(uint16_t* reg, uint8_t* reg2, uint8_t memory[], CPU* cpu){ // LD [HL],r8. Copy the value in register r8 into the byte pointed to by HL.
     memory[*reg] = *reg2;
+    debug_vram_write(*reg, *reg2);
+    printf("[LD (HL+), r8] WRITE @%04X = %02X\n", *reg, *reg2);
     reg++;
     cpu->cycles += 8;
 }
 void load_p16_r8_minus(uint16_t* reg, uint8_t* reg2, uint8_t memory[], CPU* cpu){
     memory[*reg] = *reg2;
+    debug_vram_write(*reg, *reg2);
+    printf("[LD (HL-), r8] WRITE @%04X = %02X\n", *reg, *reg2);
     reg--;
     cpu->cycles += 8;
 }
@@ -59,6 +77,8 @@ void load_r8_r8(uint8_t* reg, uint8_t* reg2, uint8_t memory[], CPU* cpu){
 void load_a8_r8(uint8_t* reg, uint8_t memory[], CPU* cpu){
     uint8_t addr = memory[cpu->pc++];
     memory[0xFF00 + addr] = *reg;
+    debug_vram_write(0xFF00 + addr, *reg);
+    printf("[LD [$FF00+%02X], r8] WRITE @%04X = %02X\n", addr, 0xFF00 + addr, *reg);
     cpu->cycles += 12;
 }
 void load_r8_a8(uint8_t* reg, uint8_t memory[], CPU* cpu){
@@ -69,6 +89,8 @@ void load_r8_a8(uint8_t* reg, uint8_t memory[], CPU* cpu){
 void load_c_r8(uint8_t* reg, uint8_t memory[], CPU* cpu){
     uint8_t addr = cpu->bc.C;
     memory[0xFF00 + addr] = *reg;
+    debug_vram_write(0xFF00 + addr, *reg);
+    printf("[LD [$FF00+C], r8] WRITE @%04X = %02X\n", 0xFF00 + addr, *reg);
     cpu->cycles += 8;
 }
 void load_r8_c(uint8_t* reg, uint8_t memory[], CPU* cpu){
@@ -81,6 +103,9 @@ void load_a16_r8(uint8_t* reg, uint8_t memory[], CPU* cpu){
     uint8_t high = memory[cpu->pc++];
     uint16_t addr = (high << 8) | low;
     memory[addr] = *reg;
+    debug_vram_write(addr, *reg);
+    printf("[LD [a16], r8] WRITE @%04X = %02X\n", addr, *reg);
+
 }
 void load_r8_a16(uint8_t* reg, uint8_t memory[], CPU* cpu){
     uint8_t low = memory[cpu->pc++];
@@ -196,6 +221,7 @@ void add_r16_r16(uint16_t* reg, uint16_t* reg2, uint8_t memory[], CPU* cpu){ // 
 
     *reg = result & 0xFFFF;
     cpu->cycles += 8;
+    printf("ADD HL, SP executed: HL=0x%04X, SP=0x%04X, Flags: %02X\n", *reg, *reg2, cpu->af.F);
 }
 void add_sp_e8(uint8_t memory[], CPU* cpu){
     int8_t value = (int8_t)memory[cpu->pc++];  // e8 is signed
@@ -1299,7 +1325,6 @@ void jump_register_nc_e8(uint8_t memory[], CPU* cpu){
     int8_t offset = (int8_t)memory[cpu->pc++];
     if (!(cpu->af.F & FLAG_C)) {
         cpu->pc += offset;
-        printf("JUMPING TO: %d\n", cpu->pc);
         cpu->cycles += 12;
     } else {
         cpu->cycles += 8;
