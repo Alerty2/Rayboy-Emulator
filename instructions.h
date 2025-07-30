@@ -1,8 +1,9 @@
 #include "input.h"
-#define FLAG_C 0
-#define FLAG_H 1
-#define FLAG_N 3
-#define FLAG_Z 4
+#define FLAG_Z 0x80
+#define FLAG_N 0x40
+#define FLAG_H 0x20
+#define FLAG_C 0x10
+
 // CPU
 typedef union {
     struct {

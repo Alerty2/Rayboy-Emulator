@@ -5,6 +5,10 @@ int emulate_cycle(uint8_t* memory, CPU* cpu) {
         exit(1);
     }
     printf("[PC=%04X] Opcode=%02X\n", cpu->pc, memory[cpu->pc]);
+    printf("A = %d\n", cpu->af.A);
+    printf("B = %d\n", cpu->bc.C);
+    printf("FLAG C:  = %d\n", (cpu->af.F & ( 1 << 4 )) >> 4);
+
 
     uint8_t opcode = memory[cpu->pc++];
 
