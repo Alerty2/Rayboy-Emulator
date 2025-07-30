@@ -45,6 +45,7 @@ int main(int argc, char* argv[])
     cpu.de.DE = 0x00D8;
     cpu.hl.HL = 0x014D;
     cpu.cycles = 0;
+    cpu.ime = 0;
 
 
 

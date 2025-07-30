@@ -44,9 +44,10 @@ typedef struct {
     reg_hl_t hl;
     uint16_t pc;
     uint16_t sp;
+    bool ime;
     int cycles;
 } CPU;
-
+void debug_vram_write(uint16_t addr, uint8_t value);
 // Loads (LD). Instructions for copying a value into other place
 void load_r16_n16(uint16_t* reg, uint8_t memory[], CPU* cpu);
 void load_p16_n8(uint16_t* reg, uint8_t memory[], CPU* cpu);
