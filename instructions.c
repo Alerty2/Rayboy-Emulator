@@ -485,7 +485,8 @@ void sbc_r8_p16(uint8_t* reg, uint16_t* reg2, uint8_t memory[], CPU* cpu) {
 void sub_r8_r8(uint8_t* reg, uint8_t* reg2, uint8_t memory[], CPU* cpu) {
     uint8_t value = *reg2;
     uint8_t before = *reg;
-    uint8_t result = *reg - value;
+    uint8_t result = before - value;
+
 
     // Zero flag
     if (result == 0)
@@ -493,18 +494,22 @@ void sub_r8_r8(uint8_t* reg, uint8_t* reg2, uint8_t memory[], CPU* cpu) {
     else
         unset_flag(&cpu->af.F, FLAG_Z);
 
-    // Subtract flag = 1 (porque es resta)
+    // Subtract flag = 1
     set_flag(&cpu->af.F, FLAG_N);
 
-    // Half-carry: si hubo préstamo del bit 4 (nibble bajo)
+    // Half-carry
     if ((before & 0x0F) < (value & 0x0F))
         set_flag(&cpu->af.F, FLAG_H);
     else
         unset_flag(&cpu->af.F, FLAG_H);
 
-    // Carry: si el resultado fue negativo
-    if (before < value)
+    // If result is negative value
+    printf("Before: %d\n", before);
+    printf("Value: %d\n", value);
+    if (before < value){
         set_flag(&cpu->af.F, FLAG_C);
+        printf("FLAG_C ACTIVATED\n");
+    }
     else
         unset_flag(&cpu->af.F, FLAG_C);
 
@@ -1270,14 +1275,17 @@ void jump_register_e8(uint8_t memory[], CPU* cpu){
     cpu->cycles += 12;
 }
 void jump_register_nz_e8(uint8_t memory[], CPU* cpu){
-    int8_t add_adress = (int8_t)memory[cpu->pc++];
-    if (!(cpu->af.F & FLAG_Z)){
-        cpu->pc += add_adress;
+    int8_t offset = (int8_t)memory[cpu->pc + 1];
+
+    if (!(cpu->af.F & FLAG_Z)) {
+        cpu->pc += 2 + offset;
         cpu->cycles += 12;
-    }else{
+    } else {
+        cpu->pc += 2;
         cpu->cycles += 8;
     }
 }
+
 void jump_register_z_e8(uint8_t memory[], CPU* cpu){
     int8_t add_adress = (int8_t)memory[cpu->pc++];
     if (cpu->af.F & FLAG_Z){
@@ -1288,14 +1296,16 @@ void jump_register_z_e8(uint8_t memory[], CPU* cpu){
     }
 }
 void jump_register_nc_e8(uint8_t memory[], CPU* cpu){
-    int8_t add_adress = (int8_t)memory[cpu->pc++];
-    if (!(cpu->af.F & FLAG_C)){
-        cpu->pc += add_adress;
+    int8_t offset = (int8_t)memory[cpu->pc++];
+    if (!(cpu->af.F & FLAG_C)) {
+        cpu->pc += offset;
+        printf("JUMPING TO: %d\n", cpu->pc);
         cpu->cycles += 12;
-    }else{
+    } else {
         cpu->cycles += 8;
     }
 }
+
 void jump_register_c_e8(uint8_t memory[], CPU* cpu){
     int8_t add_adress = (int8_t)memory[cpu->pc++];
     if (cpu->af.F & FLAG_C){
