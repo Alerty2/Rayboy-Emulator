@@ -1,7 +1,10 @@
 #ifndef INPUT_H
 #define INPUT_H
 
-#include "flags.h"
+#include <stdint.h>
+#include <stdbool.h>
+#include <raylib.h>
+#include "mmu.h"
 
 extern bool button_a;
 extern bool button_b;
@@ -13,6 +16,6 @@ extern bool dpad_left;
 extern bool dpad_right;
 
 // Changes I/O memory depending on the keys that are pressed
-void update_input(uint8_t memory[]);
+void update_input(void);
 
 #endif

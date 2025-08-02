@@ -1,9 +1,9 @@
 #include "input.h"
-void update_input(uint8_t memory[]) {
-    uint8_t *joyp = &memory[0xFF00];
+void update_input(void) {
+    uint8_t joyp_val = read_byte(0xFF00);
 
     // Get selection bits (P14/P15) from memory
-    uint8_t selection = *joyp & 0x30;  // Keep bits 4–5
+    uint8_t selection = joyp_val & 0x30;  // Keep bits 4–5
 
     // Start with upper 4 bits preserved, lower 4 bits = all unpressed (1)
     uint8_t input = selection | 0x0F;
@@ -24,5 +24,6 @@ void update_input(uint8_t memory[]) {
         if (IsKeyDown(KEY_RIGHT))input &= ~(1 << 0);
     }
 
-    *joyp = input;
+    joyp_val = input;
+    write_byte(0xFF00, input);
 }
