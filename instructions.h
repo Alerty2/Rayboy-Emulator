@@ -52,6 +52,7 @@ typedef struct {
     uint16_t pc;
     uint16_t sp;
     bool ime;
+    bool halted;
     int cycles;
 } CPU;
 void debug_vram_write(uint16_t addr, uint8_t value);
