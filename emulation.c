@@ -1,4 +1,5 @@
 #include "emulation.h"
+#include <stdlib.h>
 void handle_interrupts(CPU* cpu) {
     if (!cpu->ime) return;
 
@@ -30,6 +31,10 @@ void handle_interrupts(CPU* cpu) {
             cpu->cycles += 20;
             return;
         }
+    }
+    if (cpu->halted){
+        printf("CPU has been halted\n");
+        exit(0);
     }
 }
 
@@ -142,8 +147,10 @@ int emulate_cycle(CPU* cpu) {
             break;
         }
         case 0x10:{ // STOP n8 . Weird instruction... TODO
-            printf("STOP instruction not yet implemented\n");
+            printf("STOP reached at PC = %04X\n", cpu->pc);
+            cpu->halted = true;
             cpu->cycles += 4;
+            exit(0);
             break;
         }
         case 0x11:{ // LD DE, n16. Load n16 into register DE

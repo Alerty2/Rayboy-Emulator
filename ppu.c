@@ -1,12 +1,16 @@
 #include "ppu.h"
 #include "mmu.h"
+#include <stdlib.h>
 
-void ppu_init(PPU* ppu){
+void ppu_init(PPU* ppu, MMU_ADDRESSES* mmu_addresses){
     ppu->mode = 2;
     ppu->scanline = 0;
     ppu->cycle = 0;
     ppu->windowLineCounter = 0;
     memset(ppu->framebuffer, 0, sizeof(ppu->framebuffer));
+    write_byte(mmu_addresses->LCDC, 0x91);
+    write_byte(mmu_addresses->LY, 144);
+    write_byte(mmu_addresses->STAT, 0x80);
 }
 void ppu_step(PPU* ppu, int cycles, MMU_ADDRESSES* mmu_addresses) {
     ppu->cycle += cycles;
@@ -172,4 +176,23 @@ void render_window(PPU* ppu, MMU_ADDRESSES* mmu_addresses){
 }
 void render_sprites(PPU* ppu, MMU_ADDRESSES* mmu_addresses){
 
+}
+
+void display_vram(PPU* ppu, MMU_ADDRESSES* mmu_addresses, int* x, int* y, int* dev){
+    int ky = 10;
+    int oy = 0;
+    int kx = 10;
+    int ox = 10;
+    int line = 145;
+    *x = ox;
+    *y = 0;
+
+    for (int i = 0x8000; i < 0x97FF; i++){
+        *x += kx;
+        if (*x >= ((line * kx) + ox)){
+            *y += ky;
+            *x = ox;
+        }
+        DrawText(TextFormat("%02X", read_byte(i)), *x,*y += *dev, 10, BLACK);
+    }
 }

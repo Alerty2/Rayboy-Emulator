@@ -20,7 +20,9 @@ MMU_ADDRESSES mmu_addresses;
 // Input state
 uint8_t input_state;
 
-
+int y = 0;
+int x = 0;
+int dev = 0;
 int main(int argc, char* argv[])
 {
     // Check if ROM was provided
@@ -62,6 +64,7 @@ int main(int argc, char* argv[])
     cpu.hl.HL = 0x014D;
     cpu.cycles = 0;
     cpu.ime = 0;
+    cpu.halted = false;
 
 
 
@@ -75,10 +78,10 @@ int main(int argc, char* argv[])
     write_byte(0xFF44, 0x00); // LY
     write_byte(0xFF47, 0xE4); // BGP: White to Black
     // Initialize PPU state
-    ppu_init(&ppu);
-    set_ppu_mode(&mmu_addresses, 2);
+    ppu_init(&ppu, &mmu_addresses);
+    //set_ppu_mode(&mmu_addresses, 2);
 
-    InitWindow(160, 144, "Rayboy Emulator");
+    InitWindow(1500, 1000, "Rayboy Emulator");
     while (!WindowShouldClose())
     {
         //update_input();
@@ -89,6 +92,7 @@ int main(int argc, char* argv[])
         }
         BeginDrawing();
         ClearBackground(RAYWHITE);
+        display_vram(&ppu, &mmu_addresses, &x, &y, &dev);
         //test_frame(&ppu);
         //debug_render(&ppu);
         //display_frame(&ppu);

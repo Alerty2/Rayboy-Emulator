@@ -14,7 +14,7 @@ typedef struct{
     int windowLineCounter;
 } PPU;
 
-void ppu_init(PPU* ppu);
+void ppu_init(PPU* ppu, MMU_ADDRESSES* mmu_addresses);
 void ppu_step(PPU* ppu, int cycles, MMU_ADDRESSES* mmu_addresses);
 void ppu_render_scanline(PPU* ppu, MMU_ADDRESSES* mmu_addresses);
 void display_frame(PPU* ppu);
@@ -26,6 +26,8 @@ void debug_render(PPU* ppu);
 void render_background(PPU* ppu, MMU_ADDRESSES* mmu_addresses);
 void render_window(PPU* ppu, MMU_ADDRESSES* mmu_addresses);
 void render_sprites(PPU* ppu, MMU_ADDRESSES* mmu_addresses);
+
+void display_vram(PPU* ppu, MMU_ADDRESSES* mmu_addresses, int* x, int* y, int* dev);
 
 // PPU flags
 void set_lyc_flag(PPU* ppu, MMU_ADDRESSES* mmu_addresses);

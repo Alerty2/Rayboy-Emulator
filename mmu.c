@@ -19,7 +19,7 @@ uint8_t io_and_high[0x0200];
 uint8_t* rom_banks[MAX_ROM_BANKS];
 int      rom_bank_count = 0;
 int      current_rom_bank = 1;
-
+int counter = 0;
 void init_mmu() {
     memset(vram, 0, sizeof(vram));
     memset(wram, 0, sizeof(wram));
@@ -64,19 +64,20 @@ uint8_t read_byte(uint16_t addr) {
         return rom_banks[bank][addr - 0x4000];
     }
     else if (addr < 0xA000) {
-        printf("Reading Byte: %04X from VRAM\n", addr);
+        //printf("Reading Byte: %04X from VRAM\n", addr);
         return vram[addr - 0x8000];
     }
     else if (addr < 0xC000) {
-        printf("Reading Byte: %04X from cartidge\n", addr);
+        //printf("Reading Byte: %04X from cartidge\n", addr);
         return ext_ram[addr - 0xA000 + current_ram_bank * 0x2000];
     }
     else if (addr < 0xE000) {
-        printf("Reading Byte: %04X from wRAM\n", addr);
+        //printf("Reading Byte: %04X from wRAM\n", addr);
         return wram[addr - 0xC000];
     }
     else if (addr < 0xFE00) {
-        printf("Reading Byte: %04X from mirrored RAM\n", addr);
+        //printf("Reading Byte: %04X from mirrored RAM\n", addr);
+
         return wram[addr - 0xE000];
     }
     else {
